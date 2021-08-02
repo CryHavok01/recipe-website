@@ -1,36 +1,22 @@
 import React, { useEffect, useState } from "react"
+import getOwnedIngredients from "../services/getOwnedIngredients"
+import getRecipes from "../services/getRecipes"
 
 const HomePage = (props) => {
   const [ownedIngredients, setOwnedIngredients] = useState([])
   const [recipes, setRecipes] = useState([])
 
-  const fetchIngredients = async () => {
-    if(props.user) {
-      try {
-        const response = await fetch(`/api/v1/ownedIngredients/${props.user.id}`)
-        const body = await response.json()
-        setOwnedIngredients(body.ownedIngredients)
-      } catch(err) {
-        console.error(`Error in fetch: ${err.message}`)
-      }
-    }
-  }
-
-  const fetchRecipes = async () => {
-    if(props.user) {
-      try {
-        const response = await fetch(`/api/v1/recipes/${props.user.id}`)
-        const body = await response.json()
-        setRecipes(body.recipes)
-      } catch(err) {
-        console.error(`Error in fetch: ${err.message}`)
-      }
-    }
+  const fetchDetails = async () => {
+    const fetchedIngredients = await getOwnedIngredients(props.user.id)
+    setOwnedIngredients(fetchedIngredients)
+    const fetchedRecipes = await getRecipes(props.user.id)
+    setRecipes(fetchedRecipes)
   }
 
 useEffect(() => {
-  fetchIngredients()
-  fetchRecipes()
+  if(props.user) {
+    fetchDetails()
+  }
 }, [props.user])
 
 let ingredientsNum = 0
@@ -45,9 +31,11 @@ if (recipes.length > 0) {
 
   return (
     <div>
-      <h1>Your Home Kitchen</h1>
+      <h1>Your Home Page</h1>
       <p>You currently have {ingredientsNum} ingredients in your kitchen</p>
+      <button className="button">Ingredients</button>
       <p>You have saved {recipesNum} recipes</p>
+      <button className="button">Recipes</button>
     </div>
   )
 }
