@@ -7,16 +7,20 @@ const HomePage = (props) => {
   const [recipes, setRecipes] = useState([])
 
   const fetchDetails = async () => {
-    const fetchedIngredients = await getOwnedIngredients(props.user.id)
-    setOwnedIngredients(fetchedIngredients)
-    const fetchedRecipes = await getRecipes(props.user.id)
-    setRecipes(fetchedRecipes)
+    if(props.user) {
+      try {
+        const response = await fetch(`/api/v1/homePage/${props.user.id}`)
+        const body = await response.json()
+        setOwnedIngredients(body.ownedIngredients)
+        setRecipes(body.recipes)
+      } catch(err) {
+        console.error(`Error in fetch: ${err.message}`)
+      }
+    }
   }
 
 useEffect(() => {
-  if(props.user) {
-    fetchDetails()
-  }
+  fetchDetails()
 }, [props.user])
 
 let ingredientsNum = 0
