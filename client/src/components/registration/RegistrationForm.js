@@ -15,61 +15,71 @@ const RegistrationForm = () => {
 
   const validateInput = (payload) => {
     setErrors({});
+    let foundError = false
     const { email, password, passwordConfirmation } = payload;
-    const emailRegexp = config.validation.email.regexp;
+    const { emailRegexp } = config.validation.email.regexp;
     let newErrors = {};
     if (!email.match(emailRegexp)) {
       newErrors = {
         ...newErrors,
         email: "is invalid",
       };
+      foundError = true
     }
-
+    
     if (password.trim() == "") {
       newErrors = {
         ...newErrors,
         password: "is required",
       };
+      foundError = true
     }
-
+    
     if (passwordConfirmation.trim() === "") {
       newErrors = {
         ...newErrors,
         passwordConfirmation: "is required",
       };
+      foundError = true
     } else {
       if (passwordConfirmation !== password) {
         newErrors = {
           ...newErrors,
           passwordConfirmation: "does not match password",
         };
+        foundError = true
       }
     }
 
     setErrors(newErrors);
+    return foundError
   };
 
   const onSubmit = (event) => {
     event.preventDefault();
-    validateInput(userPayload);
-    if (Object.keys(errors).length === 0) {
-      fetch("/api/v1/users", {
-        method: "post",
-        body: JSON.stringify(userPayload),
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-      }).then((resp) => {
-        if (resp.ok) {
-          resp.json().then((user) => {
-            setShouldRedirect(true);
-          });
-        } else {
-          const errorMessage = `${resp.status} (${resp.statusText})`;
-          const error = new Error(errorMessage);
-          throw error;
-        }
-      });
+    const foundError = validateInput(userPayload);
+    try {
+      if (!foundError) {
+        fetch("/api/v1/users", {
+          method: "post",
+          body: JSON.stringify(userPayload),
+          headers: new Headers({
+            "Content-Type": "application/json",
+          }),
+        }).then((resp) => {
+          if (resp.ok) {
+            resp.json().then((user) => {
+              setShouldRedirect(true);
+            });
+          } else {
+            const errorMessage = `${resp.status} (${resp.statusText})`;
+            const error = new Error(errorMessage);
+            throw error;
+          }
+        });
+      }
+    } catch(err) {
+      console.error(`Error in fetch: ${err.message}`)
     }
   };
 
@@ -81,7 +91,7 @@ const RegistrationForm = () => {
   };
 
   if (shouldRedirect) {
-    location.href = "/";
+    location.href = "/home";
   }
 
   return (
