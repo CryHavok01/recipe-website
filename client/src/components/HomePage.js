@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
-import getOwnedIngredients from "../services/getOwnedIngredients"
-import getRecipes from "../services/getRecipes"
+import { Link } from "react-router-dom"
 
 const HomePage = (props) => {
   const [ownedIngredients, setOwnedIngredients] = useState([])
@@ -37,7 +36,9 @@ if (recipes.length > 0) {
     <div>
       <h1>Your Home Page</h1>
       <p>You currently have {ingredientsNum} ingredients in your kitchen</p>
-      <button className="button">Ingredients</button>
+      <Link to="/ingredients">
+        <button className="button">Ingredients</button>
+      </Link>
       <p>You have saved {recipesNum} recipes</p>
       <button className="button">Recipes</button>
     </div>
