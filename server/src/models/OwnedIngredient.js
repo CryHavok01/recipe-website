@@ -5,7 +5,7 @@ class OwnedIngredient extends Model {
     return "ownedIngredients"
   }
 
-  static get JsonSchema() {
+  static get jsonSchema() {
     return {
       type: "object",
       required: ["name", "measurement", "unit", "userId"],
