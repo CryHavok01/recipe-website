@@ -28,7 +28,7 @@ const IngredientsList = (props) => {
 
   return (
     <div>
-        <h1>What's in Your Cupboard?</h1>
+      <h1>What's in Your Cupboard?</h1>
       {ingredientsList}
     </div>
   )
