@@ -34,6 +34,7 @@ const IngredientsList = (props) => {
           Add New Ingredient
         </Link>
       </div>
+      <p>Hello</p>
       {ingredientsList}
     </div>
   )

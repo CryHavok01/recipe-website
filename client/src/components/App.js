@@ -9,7 +9,7 @@ import SignInForm from "./authentication/SignInForm";
 import TopBar from "./layout/TopBar";
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute";
 import HomePage from "./HomePage";
-import IngredientsList from "./ingredientsList";
+import IngredientsList from "./IngredientsList";
 import IngredientShow from "./IngredientShow";
 import NewIngredient from "./NewIngredient";
 
