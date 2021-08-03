@@ -1,7 +1,6 @@
 const getOwnedIngredients = async (userId) => {
-  console.log(userId)
   try {
-    const response = await fetch(`/api/v1/ownedIngredients/${userId}`)
+    const response = await fetch(`/api/v1/ownedIngredients/list/${userId}`)
     const body = await response.json()
     return body.ownedIngredients
   } catch(err) {
