@@ -7,7 +7,7 @@ const IngredientShow = (props) => {
   const { id } = useParams()
   const fetchIngredientDetails = async () => {
     try {
-      const response = await fetch(`/api/v1/ownedIngredients/${id}`)
+      const response = await fetch(`/api/v1/ingredients/${id}`)
       const body = await response.json()
       setIngredient(body.ingredient)
     } catch(err) {
@@ -29,7 +29,7 @@ const IngredientShow = (props) => {
   return(
     <div>
       <h2>{capName}</h2>
-      <h4>Measurement: {Number(ingredient.measurement)} {ingredient.unit}</h4>
+      <h4>Measurement: {Number(ingredient.amount)} {ingredient.unit}</h4>
       {description}
     </div>
   )

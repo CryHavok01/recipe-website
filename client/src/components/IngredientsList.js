@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import getOwnedIngredients from "../services/getOwnedIngredients"
+import getIngredients from "../services/getIngredients"
 import IngredientTile from "./IngredientTile"
 
 const IngredientsList = (props) => {
-  const [ownedIngredients, setOwnedIngredients] = useState([])
+  const [ingredients, setIngredients] = useState([])
 
   const fetchIngredients = async () => {
     if(props.user) {
-      const ingredients = await getOwnedIngredients(props.user.id)
-      setOwnedIngredients(ingredients)
+      const ingredients = await getIngredients(props.user.id)
+      setIngredients(ingredients)
     }
   }
 
@@ -17,7 +17,7 @@ const IngredientsList = (props) => {
     fetchIngredients()
   }, [props.user])
 
-  const ingredientsList = ownedIngredients.map(ingredient => {
+  const ingredientsList = ingredients.map(ingredient => {
     return (
       <IngredientTile 
         key={ingredient.id}

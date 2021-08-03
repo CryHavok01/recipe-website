@@ -14,12 +14,12 @@ homePageDetailsRouter.get("/:userId", async (req, res) => {
       return RecipeSerializer.getSummary(recipe)
     })
 
-    const ownedIngredients = await user.$relatedQuery("ownedIngredients")
-    const serializedIngredients = ownedIngredients.map(ingredient => {
+    const ingredients = await user.$relatedQuery("ingredients")
+    const serializedIngredients = ingredients.map(ingredient => {
       return IngredientSerializer.getIngredientInfo(ingredient)
     })
 
-    return res.status(200).json({ recipes: serializedRecipes, ownedIngredients: serializedIngredients })
+    return res.status(200).json({ recipes: serializedRecipes, ingredients: serializedIngredients })
   } catch(err) {
     return res.status(500).json({ err })
   }
