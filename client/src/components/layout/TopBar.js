@@ -20,14 +20,21 @@ const TopBar = ({ user }) => {
     </li>,
   ];
 
+  let homeButton
+  if(user) {
+    homeButton = (
+      <li>
+        <Link to="/home">Home</Link>
+      </li>
+    )
+  }
+
   return (
     <div className="top-bar">
       <div className="top-bar-left">
         <ul className="menu">
           <Link to ="/" className="menu-text">Josh's Kitchen</Link>
-          <li>
-            <Link to="/home">Home</Link>
-          </li>
+          {homeButton}
         </ul>
       </div>
       <div className="top-bar-right">

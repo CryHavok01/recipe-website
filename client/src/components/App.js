@@ -9,6 +9,9 @@ import SignInForm from "./authentication/SignInForm";
 import TopBar from "./layout/TopBar";
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute";
 import HomePage from "./HomePage";
+import IngredientsList from "./ingredientsList";
+import IngredientShow from "./IngredientShow";
+import NewIngredient from "./NewIngredient";
 
 const App = (props) => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -26,12 +29,14 @@ const App = (props) => {
       <TopBar user={currentUser} />
       <Switch>
         <Route exact path="/">
-          <h2>Welcome to Josh's Kitchen</h2>
+          <h1>Welcome to Josh's Kitchen</h1>
           <p>This is a website designed to help you keep track of your favorite recipes, as well as all the various ingredients you have in your own kitchen.  Get started by adding information about the ingredients you own, and then you can search for recipes that look tasty or add your own.  Once you select a recipe, we'll let you know if you have enough ingredients to make it, or let you know which things you should go shopping for.  If you're ready to get cooking, you can press the big green button and we'll automatically update your ingredients by subtracting the amounts you use in that recipe.  Sign up for a new account, or sign in to an existing one to get cooking!</p>
         </Route>
         <Route exact path="/users/new" component={RegistrationForm} />
         <Route exact path="/user-sessions/new" component={SignInForm} />
         <AuthenticatedRoute exact path="/home" component={HomePage} user={currentUser} />
+        <AuthenticatedRoute exact path="/ingredients" component={IngredientsList} user={currentUser} />
+        <AuthenticatedRoute exact path="/ingredients/:id" component={IngredientShow} user={currentUser} />
       </Switch>
     </Router>
   );

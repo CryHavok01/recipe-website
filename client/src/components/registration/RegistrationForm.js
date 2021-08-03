@@ -17,7 +17,7 @@ const RegistrationForm = () => {
     setErrors({});
     let foundError = false
     const { email, password, passwordConfirmation } = payload;
-    const { emailRegexp } = config.validation.email.regexp;
+    const emailRegexp = config.validation.email.regexp.emailRegex;
     let newErrors = {};
     if (!email.match(emailRegexp)) {
       newErrors = {
