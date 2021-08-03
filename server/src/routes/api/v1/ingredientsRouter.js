@@ -1,6 +1,9 @@
 import express from "express"
-import { Ingredient, User } from "../../../models/index.js"
+import { Ingredient, PantryMeasurement, User } from "../../../models/index.js"
 import IngredientSerializer from "../../../serializers/IngredientSerializer.js"
+import objection from "objection"
+import cleanUserInput from "../../../services/cleanUserInput.js"
+const { ValidationError, NotNullViolationError } = objection
 
 const ingredientsRouter = new express.Router()
 
@@ -26,6 +29,22 @@ ingredientsRouter.get("/:id", async (req, res) => {
     const serializedIngredient = await IngredientSerializer.getIngredientWithPantryMeasurements(ingredient)
     return res.status(200).json({ ingredient: serializedIngredient})
   } catch(err) {
+    return res.status(500).json({ err })
+  }
+})
+
+ingredientsRouter.post("/", async (req, res) => {
+  const { newIngredient, userId } = req.body
+  const cleanedIngredient = cleanUserInput(newIngredient)
+  try {
+    const user = await User.query().findById(userId)
+    const fetchedIngredient = await user.$relatedQuery("ingredients").insertAndFetch(cleanedIngredient)
+    return res.status(201).json("successful input")
+  } catch(err) {
+    if (err instanceof ValidationError || err instanceof NotNullViolationError) {
+      
+      return res.status(422).json({ errors: err.data})
+    }
     return res.status(500).json({ err })
   }
 })

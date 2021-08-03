@@ -10,7 +10,7 @@ class PantryMeasurement extends Model {
       type: "object",
       required: ["amount", "unit"],
       properties: {
-        amount: { type: "number", minimum: 0 },
+        amount: { type: "number", exclusiveMinimum: 0 },
         unit: { type: "string" },
         description: { type: "string" }
       }
