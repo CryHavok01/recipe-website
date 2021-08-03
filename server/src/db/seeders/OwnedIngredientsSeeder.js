@@ -12,7 +12,7 @@ class OwnedIngredientsSeeder {
       },
       {
         name: "pepper",
-        measurement: 2,
+        measurement: 2.22,
         unit: "tablespoons",
         description: "fresh ground",
         userId: 2

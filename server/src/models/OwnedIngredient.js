@@ -12,7 +12,7 @@ class OwnedIngredient extends Model {
       properties: {
         name: { type: "string" },
         description: { type: "string" },
-        measurement: { type: "integer", minimum: 0 },
+        measurement: { type: "number", minimum: 0 },
         unit: { type: "string" },
         userId: { type: "integer" }
       }
