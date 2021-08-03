@@ -29,7 +29,7 @@ const IngredientShow = (props) => {
   return(
     <div>
       <h2>{capName}</h2>
-      <h4>Measurement: {ingredient.measurement} {ingredient.unit}</h4>
+      <h4>Measurement: {Number(ingredient.measurement)} {ingredient.unit}</h4>
       {description}
     </div>
   )
