@@ -27,8 +27,13 @@ const IngredientsList = (props) => {
   })
 
   return (
-    <div>
-      <h1>What's in Your Cupboard?</h1>
+    <div className="callout">
+      <div>
+        <h1 className="same_line">What's in Your Cupboard?</h1>
+        <Link to="/addIngredient" className="button same_line align_right">
+          Add New Ingredient
+        </Link>
+      </div>
       {ingredientsList}
     </div>
   )
