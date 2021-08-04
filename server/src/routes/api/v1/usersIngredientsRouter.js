@@ -9,7 +9,6 @@ usersIngredientsRouter.get("/", async (req, res) => {
   try {
     const user = await User.query().findById(userId)
     const ingredients = await user.$relatedQuery("ingredients")
-    console.log(ingredients)
     const serializedIngredients = ingredients.map(ingredient => {
       return IngredientSerializer.getIngredientInfo(ingredient)
     })

@@ -4,6 +4,10 @@ const cleanUserInput = formInput => {
       delete formInput[field]
     }
 
+    if (field === "id") {
+      delete formInput[field]
+    }
+
     if (field === "amount" && formInput[field]) {
       const validInput = Number(formInput[field])
       formInput[field] = validInput
