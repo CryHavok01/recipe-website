@@ -37,12 +37,14 @@ ingredientsRouter.post("/", async (req, res) => {
   const { newIngredient, userId } = req.body
   const cleanedIngredient = cleanUserInput(newIngredient)
   try {
-    const user = await User.query().findById(userId)
-    const fetchedIngredient = await user.$relatedQuery("ingredients").insertAndFetch(cleanedIngredient)
+    const fetchedIngredient = await User.transaction(async (trx) => {
+      const user = await User.query(trx).findById(userId)
+      const fetchedIngredient = await user.$relatedQuery("ingredients", trx).insertAndFetch(cleanedIngredient)
+      return fetchedIngredient
+    })
     return res.status(201).json("successful input")
   } catch(err) {
     if (err instanceof ValidationError || err instanceof NotNullViolationError) {
-      
       return res.status(422).json({ errors: err.data})
     }
     return res.status(500).json({ err })
