@@ -2,10 +2,13 @@ import express from "express";
 import passport from "passport";
 import objection from "objection";
 import { User } from "../../../models/index.js";
+import usersIngredientsRouter from "./usersIngredientsRouter.js";
 
 const { ValidationError } = objection
 
 const usersRouter = new express.Router();
+
+usersRouter.use("/:userId/ingredients", usersIngredientsRouter)
 
 usersRouter.post("/", async (req, res) => {
   const { email, password, passwordConfirmation } = req.body;

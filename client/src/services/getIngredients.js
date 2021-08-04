@@ -1,6 +1,6 @@
-const getingredients = async (userId) => {
+const getIngredients = async (userId) => {
   try {
-    const response = await fetch(`/api/v1/ingredients/list/${userId}`)
+    const response = await fetch(`/api/v1/users/${userId}/ingredients`)
     const body = await response.json()
     return body.ingredients
   } catch(err) {
@@ -8,4 +8,4 @@ const getingredients = async (userId) => {
   }
 }
 
-export default getingredients
+export default getIngredients

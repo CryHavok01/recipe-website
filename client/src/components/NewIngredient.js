@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import translateServerErrors from "../services/translateServerErrors"
 import ErrorList from "./shared/ErrorList"
 import FormError from "./layout/FormError"
+import { Redirect } from "react-router-dom"
 
 const NewIngredient = (props) => {
   const [formData, setFormData] = useState({
@@ -121,13 +122,15 @@ const NewIngredient = (props) => {
             name="unit"
             value={formData.unit}
             onChange={handleChange}
-            />
+          />
       </div>
     )
   }
 
   if (shouldRedirect) {
-    location.href="/ingredients"
+    return (
+      <Redirect push to="/ingredients" />
+    )
   }
 
   return(
@@ -142,8 +145,8 @@ const NewIngredient = (props) => {
           name="name" 
           value={formData.name}
           onChange={handleChange}
-          />
-          <FormError error={errors.name} />
+        />
+        <FormError error={errors.name} />
 
         <label htmlFor="amount">Amount: </label>
         <input 

@@ -10,22 +10,13 @@ class IngredientSerializer {
     return serializedIngredient
   }
 
-  static async getIngredientWithPantryMeasurements(ingredient) {
-    const allowedAttributes = ["name", "id"]
+  static async getIngredientWithDetails(ingredient) {
+    const allowedAttributes = ["name", "id", "amount", "unit", "description"]
 
     let serializedIngredient = {}
     allowedAttributes.forEach(attribute => {
       serializedIngredient[attribute] = ingredient[attribute]
     })
-
-    const pantryMeasurement = await ingredient.$relatedQuery("pantryMeasurement").first()
-
-    serializedIngredient = {
-      ...serializedIngredient,
-      amount: pantryMeasurement.amount,
-      unit: pantryMeasurement.unit,
-      description: pantryMeasurement.description
-    }
 
     return serializedIngredient
   }

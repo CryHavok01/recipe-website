@@ -20,6 +20,5 @@
     "node": "^14.15"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
   }
 }
