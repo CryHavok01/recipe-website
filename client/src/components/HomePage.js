@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 const HomePage = (props) => {
-  const [ownedIngredients, setOwnedIngredients] = useState([])
+  const [ingredients, setIngredients] = useState([])
   const [recipes, setRecipes] = useState([])
 
   const fetchDetails = async () => {
@@ -10,7 +10,7 @@ const HomePage = (props) => {
       try {
         const response = await fetch(`/api/v1/homePage/${props.user.id}`)
         const body = await response.json()
-        setOwnedIngredients(body.ownedIngredients)
+        setIngredients(body.ingredients)
         setRecipes(body.recipes)
       } catch(err) {
         console.error(`Error in fetch: ${err.message}`)
@@ -23,8 +23,8 @@ useEffect(() => {
 }, [props.user])
 
 let ingredientsNum = 0
-if (ownedIngredients.length > 0) {
-  ingredientsNum = ownedIngredients.length
+if (ingredients.length > 0) {
+  ingredientsNum = ingredients.length
 }
 
 let recipesNum = 0

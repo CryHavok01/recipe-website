@@ -6,17 +6,14 @@ class RecipeSeeder {
       {
         name: "Cheeseburger",
         description: "Tasty burger on a toasted bun",
-        userId: 1
       },
       {
         name: "French Toast",
         description: "Delicious breakfast treat",
-        userId: 2
       },
       {
         name: "Spaghetti",
         description: "Classic Italian recipe",
-        userId: 2
       }
     ]
 

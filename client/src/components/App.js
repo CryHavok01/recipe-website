@@ -9,7 +9,7 @@ import SignInForm from "./authentication/SignInForm";
 import TopBar from "./layout/TopBar";
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute";
 import HomePage from "./HomePage";
-import IngredientsList from "./ingredientsList";
+import IngredientsList from "./IngredientsList";
 import IngredientShow from "./IngredientShow";
 import NewIngredient from "./NewIngredient";
 
@@ -37,6 +37,7 @@ const App = (props) => {
         <AuthenticatedRoute exact path="/home" component={HomePage} user={currentUser} />
         <AuthenticatedRoute exact path="/ingredients" component={IngredientsList} user={currentUser} />
         <AuthenticatedRoute exact path="/ingredients/:id" component={IngredientShow} user={currentUser} />
+        <AuthenticatedRoute exact path="/ingredients/new" component={NewIngredient} user={currentUser} />
       </Switch>
     </Router>
   );

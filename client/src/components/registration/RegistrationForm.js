@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import FormError from "../layout/FormError";
 import config from "../../config";
+import ErrorList from "../shared/ErrorList";
+import translateServerErrors from "../../services/translateServerErrors";
 
 const RegistrationForm = () => {
   const [userPayload, setUserPayload] = useState({
@@ -10,7 +12,7 @@ const RegistrationForm = () => {
   });
 
   const [errors, setErrors] = useState({});
-
+  const [serverErrors, setServerErrors] = useState({})
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const validateInput = (payload) => {
@@ -55,28 +57,30 @@ const RegistrationForm = () => {
     return foundError
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     const foundError = validateInput(userPayload);
     try {
       if (!foundError) {
-        fetch("/api/v1/users", {
+        const response = await fetch("/api/v1/users", {
           method: "post",
           body: JSON.stringify(userPayload),
           headers: new Headers({
             "Content-Type": "application/json",
           }),
-        }).then((resp) => {
-          if (resp.ok) {
-            resp.json().then((user) => {
-              setShouldRedirect(true);
-            });
-          } else {
-            const errorMessage = `${resp.status} (${resp.statusText})`;
-            const error = new Error(errorMessage);
-            throw error;
-          }
         });
+        if (!response.ok) {
+          if (response.status === 422) {
+            const body = await response.json();
+            const newServerErrors = translateServerErrors(body.errors)
+            return setServerErrors(newServerErrors)
+          }
+          const errorMessage = `${resonse.status}: (${resonse.statusText})`;
+          const error = new Error(errorMessage);
+          throw error;
+        };
+        const userData = await response.json();
+        setShouldRedirect(true);
       }
     } catch(err) {
       console.error(`Error in fetch: ${err.message}`)
@@ -97,7 +101,8 @@ const RegistrationForm = () => {
   return (
     <div className="grid-container" onSubmit={onSubmit}>
       <h1>Register</h1>
-      <form>
+      <ErrorList errors={serverErrors} />
+      <form onSubmit={onSubmit}>
         <div>
           <label>
             Email
