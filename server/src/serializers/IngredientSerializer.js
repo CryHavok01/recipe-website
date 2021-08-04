@@ -10,7 +10,7 @@ class IngredientSerializer {
     return serializedIngredient
   }
 
-  static async getIngredientWithDetails(ingredient) {
+  static getIngredientWithDetails(ingredient) {
     const allowedAttributes = ["name", "id", "amount", "unit", "description"]
 
     let serializedIngredient = {}

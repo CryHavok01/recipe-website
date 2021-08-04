@@ -3,107 +3,31 @@ import FormError from "./layout/FormError"
 import { Redirect } from "react-router-dom"
 
 const EditIngredientForm = (props) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    amount: "",
-    unit: "",
-    description: ""
-  })
-  const [errors, setErrors] = useState({})
+
   const [showOther, setShowOther] = useState(false)
   const [shouldRedirect, setShouldRedirect] = useState(false)
 
   useEffect(() => {
     if(props.ingredient) {
-      setFormData({
+      props.setFormData({
         name: props.ingredient.name,
         amount: props.ingredient.amount,
         unit: props.ingredient.unit,
-        description: props.ingredient.description
+        description: props.ingredient.description || ""
       })
     }
   }, [props.ingredient])
 
-  const validateData = (formData) => {
-    setErrors({});
-    const { name, amount, unit } = formData
-    let foundError = false
-    let newErrors = {};
-    if (name.trim() == "") {
-      newErrors = {
-        ...newErrors,
-        name: "is required",
-      };
-      foundError = true
-    }
-
-    if (amount.trim() == "") {
-      newErrors = {
-        ...newErrors,
-        amount: "is required",
-      };
-      foundError = true
-    }
-
-
-    if (unit.trim() == "") {
-      newErrors = {
-        ...newErrors,
-        unit: "is required",
-      };
-      foundError = true
-    }
-
-    if (unit.trim() == "other") {
-      newErrors = {
-        ...newErrors,
-        unit: "please enter units"
-      }
-    }
-
-    setErrors(newErrors);
-    return foundError
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const foundError = validateData(formData)
-    if (!foundError) {
-      const formPayload = {
-        editedIngredient: { ...formData, id: props.ingredient.id },
-        userId: props.user.id
-      }
-      try {
-        const response = await fetch(`/api/v1/ingredients`, {
-          method: "PATCH",
-          headers: new Headers({
-            "Content-Type": "application/json"
-          }),
-          body: JSON.stringify(formPayload)
-        })
-        if(!response.ok) {
-          const errorMessage = `${response.status}: (${response.statusText})`
-          const error = new Error(errorMessage)
-          throw(error)
-        } else {
-          const body = await response.json()
-        }
-      } catch(error) {
-        console.error(`Error in Fetch: ${error.message}`)
-      }
-    }
-  }
-
   const handleChange = (event) => {
-    setFormData({
-      ...formData,
+    props.setFormData({
+      ...props.formData,
       [event.currentTarget.name]: event.currentTarget.value
     })
   }
 
   const handleSelect = (event) => {
-    setFormData({
-      ...formData,
+    props.setFormData({
+      ...props.formData,
       [event.currentTarget.name]: event.currentTarget.value
     })
     if (event.currentTarget.value === "other") {
@@ -122,7 +46,7 @@ const EditIngredientForm = (props) => {
             type="text" 
             id="other" 
             name="unit"
-            value={formData.unit}
+            value={props.formData.unit}
             onChange={handleChange}
           />
       </div>
@@ -132,16 +56,16 @@ const EditIngredientForm = (props) => {
   return(
     <div>
       <h2>Edit Details for {props.capName}</h2>
-      <form className="callout secondary" onSubmit={handleSubmit}>
+      <form className="callout secondary" onSubmit={props.handleSubmit}>
         <label htmlFor="name">Name: </label>
         <input 
           type="text" 
           id="name" 
           name="name" 
-          value={formData.name}
+          value={props.formData.name}
           onChange={handleChange}
         />
-        <FormError error={errors.name} />
+        <FormError error={props.errors.name} />
 
         <label htmlFor="amount">Amount: </label>
         <input 
@@ -150,14 +74,14 @@ const EditIngredientForm = (props) => {
           id="amount" 
           name="amount"
           min=".01"
-          value={formData.amount}
+          value={props.formData.amount}
           onChange={handleChange}
         />
-        <FormError error={errors.amount} />
+        <FormError error={props.errors.amount} />
 
         <label htmlFor="unit">Units: </label>
         <select id="unit" name="unit" defaultValue="select" onChange={handleSelect}>
-          <option hidden disabled value="select"> {formData.unit} </option>
+          <option hidden disabled value="select"> {props.formData.unit} </option>
           <option value="tsp">Teaspoon(s)</option>
           <option value="tbsp">Tablespoon(s)</option>
           <option value="oz">Ounce(s)</option>
@@ -166,7 +90,7 @@ const EditIngredientForm = (props) => {
         </select>
 
         {otherField}
-        <FormError error={errors.unit} />
+        <FormError error={props.errors.unit} />
 
 
         <label htmlFor="description">Description (optional): </label>
@@ -174,7 +98,7 @@ const EditIngredientForm = (props) => {
           type="text"
           id="description"
           name="description"
-          value={formData.description}
+          value={props.formData.description}
           onChange={handleChange}
         />
 

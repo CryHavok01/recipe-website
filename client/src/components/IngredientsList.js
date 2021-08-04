@@ -29,7 +29,7 @@ const IngredientsList = (props) => {
   return (
     <div className="callout">
       <div>
-        <h1 className="same_line">What's in Your Cupboard?</h1>
+        <h1 className="same_line">What's in Your Pantry?</h1>
         <Link to="/ingredients/new" className="button same_line align_right">
           Add New Ingredient
         </Link>

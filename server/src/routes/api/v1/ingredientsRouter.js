@@ -2,6 +2,7 @@ import express from "express"
 import { Ingredient, PantryMeasurement, User } from "../../../models/index.js"
 import objection from "objection"
 import cleanUserInput from "../../../services/cleanUserInput.js"
+import IngredientSerializer from "../../../serializers/IngredientSerializer.js"
 const { ValidationError, NotNullViolationError } = objection
 
 const ingredientsRouter = new express.Router()
@@ -59,19 +60,37 @@ ingredientsRouter.patch("/", async (req, res) => {
 
   try {
     const existingIngredient = await Ingredient.query().findOne({ name: cleanedIngredient.name })
+
     if (existingIngredient) {
       const ingredientInPantry = await User.relatedQuery("ingredients").for(userId).where({ name: cleanedIngredient.name })
+
       if (ingredientInPantry.length > 0) {
         const editedMeasurement = await User.transaction(async (trx) => {
-          const measurement = await User.relatedQuery("pantryMeasurements", trx).for(userId).where("ingredientId", ingredientId)
-          const editedMeasurement = await PantryMeasurement.query(trx).updateAndFetchById(measurement[0].id, {
-            amount: cleanedIngredient.amount,
-            unit: cleanedIngredient.unit,
-            description: cleanedIngredient.description
-          })
-          return editedMeasurement
+          const originalMeasurement = await User.relatedQuery("pantryMeasurements", trx).for(userId).where("ingredientId", ingredientId)
+          const deleted = await PantryMeasurement.query(trx).deleteById(originalMeasurement[0].id)
+          const currentMeasurement = await User.relatedQuery("pantryMeasurements", trx).for(userId).where("ingredientId", existingIngredient.id)
+          let newMeasurement
+          if (currentMeasurement.length > 0) {
+            newMeasurement = await PantryMeasurement.query(trx).updateAndFetchById(currentMeasurement[0].id, {
+              amount: cleanedIngredient.amount,
+              unit: cleanedIngredient.unit,
+              description: cleanedIngredient.description
+            })
+          } else {
+            newMeasurement = await PantryMeasurement.query(trx).insertAndFetch({
+              userId: userId,
+              ingredientId: existingIngredient.id,
+              amount: cleanedIngredient.amount,
+              unit: cleanedIngredient.unit,
+              description: cleanedIngredient.description
+            })
+          }
+          return newMeasurement
         })
-        return res.status(201).json({ editedIngredient: existingIngredient})
+
+        const updatedIngredients = await User.relatedQuery("ingredients").for(userId).where({ name: cleanedIngredient.name })
+        const serializedIngredient = IngredientSerializer.getIngredientWithDetails(updatedIngredients[0])
+        return res.status(201).json({ editedIngredient: serializedIngredient })
       }
 
       const relatedIngredient = await User.transaction(async (trx) => {
@@ -86,7 +105,9 @@ ingredientsRouter.patch("/", async (req, res) => {
         })
         return relatedIngredient
       })
-      return res.status(201).json({ editedIngredient: relatedIngredient })
+      const updatedIngredients = await User.relatedQuery("ingredients").for(userId).where({ name: cleanedIngredient.name })
+      const serializedIngredient = IngredientSerializer.getIngredientWithDetails(updatedIngredients[0])
+      return res.status(201).json({ editedIngredient: serializedIngredient })
     }
 
     const fetchedIngredient = await User.transaction(async (trx) => {
@@ -101,6 +122,17 @@ ingredientsRouter.patch("/", async (req, res) => {
     if (err instanceof ValidationError || err instanceof NotNullViolationError) {
       return res.status(422).json({ errors: err.data})
     }
+    return res.status(500).json({ err })
+  }
+})
+
+ingredientsRouter.delete("/", async (req, res) => {
+  const { userId, ingredientId } = req.body
+  try {
+    const existingMeasurement = await User.relatedQuery("pantryMeasurements").for(userId).where("ingredientId", ingredientId)
+    const deleted = await PantryMeasurement.query().deleteById(existingMeasurement[0].id)
+    return res.status(203).json("successful deletion")
+  } catch(err) {
     return res.status(500).json({ err })
   }
 })
