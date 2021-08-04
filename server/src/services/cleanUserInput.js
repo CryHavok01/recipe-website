@@ -8,6 +8,10 @@ const cleanUserInput = formInput => {
       const validInput = Number(formInput[field])
       formInput[field] = validInput
     }
+
+    if (typeof formInput[field] === "string") {
+      formInput[field] = formInput[field].toLowerCase()
+    }
   })
 
   return formInput

@@ -45,6 +45,13 @@ const NewIngredient = (props) => {
       foundError = true
     }
 
+    if (unit.trim() == "other") {
+      newErrors = {
+        ...newErrors,
+        unit: "please enter units"
+      }
+    }
+
     setErrors(newErrors);
     return foundError
   }

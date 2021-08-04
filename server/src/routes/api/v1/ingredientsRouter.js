@@ -36,7 +36,36 @@ ingredientsRouter.get("/:id", async (req, res) => {
 ingredientsRouter.post("/", async (req, res) => {
   const { newIngredient, userId } = req.body
   const cleanedIngredient = cleanUserInput(newIngredient)
+
   try {
+    const existingIngredient = await Ingredient.query().findOne({ name: cleanedIngredient.name })
+    if (existingIngredient) {
+
+      const ingredientInPantry = await User.relatedQuery("ingredients").for(userId).where({ name: cleanedIngredient.name })
+      if (ingredientInPantry.length > 0) {
+        return res.status(422).json({ 
+          errors: {
+            "Looks like": [{
+              message: "you already own this ingredient!  Please edit that ingredient instead of creating a new one." 
+            }]
+          }
+        })
+      }
+
+      const relatedIngredient = await User.transaction(async (trx) => {
+        const user = await User.query(trx).findById(userId)
+        const relatedIngredient = await user.$relatedQuery("ingredients", trx).relate({
+          id: existingIngredient.id,
+          amount: cleanedIngredient.amount,
+          unit: cleanedIngredient.unit,
+          description: cleanedIngredient.description
+        })
+        return relatedIngredient
+      })
+      console.log(relatedIngredient)
+      return res.status(201).json("Successful input")
+    }
+
     const fetchedIngredient = await User.transaction(async (trx) => {
       const user = await User.query(trx).findById(userId)
       const fetchedIngredient = await user.$relatedQuery("ingredients", trx).insertAndFetch(cleanedIngredient)
