@@ -37,7 +37,7 @@ const App = (props) => {
         <AuthenticatedRoute exact path="/home" component={HomePage} user={currentUser} />
         <AuthenticatedRoute exact path="/ingredients" component={IngredientsList} user={currentUser} />
         <AuthenticatedRoute exact path="/ingredients/:id" component={IngredientShow} user={currentUser} />
-        <AuthenticatedRoute exact path="/add_ingredient" component={NewIngredient} user={currentUser} />
+        <AuthenticatedRoute exact path="/ingredients/new" component={NewIngredient} user={currentUser} />
       </Switch>
     </Router>
   );
