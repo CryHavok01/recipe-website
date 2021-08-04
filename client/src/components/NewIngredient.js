@@ -157,8 +157,8 @@ const NewIngredient = (props) => {
           min=".01"
           value={formData.amount}
           onChange={handleChange}
-          />
-          <FormError error={errors.amount} />
+        />
+        <FormError error={errors.amount} />
 
 
         <label htmlFor="unit">Units: </label>
@@ -182,13 +182,13 @@ const NewIngredient = (props) => {
           name="description"
           value={formData.description}
           onChange={handleChange}
-          />
+        />
 
-          <input 
-            type="submit" 
-            value="Submit"
-            className="button"
-          />
+        <input 
+          type="submit" 
+          value="Submit"
+          className="button"
+        />
       </form>
     </div>
   )
