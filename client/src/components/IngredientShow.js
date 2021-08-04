@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router"
+import { useParams, Redirect } from "react-router-dom"
+import EditIngredientForm from "./EditIngredientForm"
 
 const IngredientShow = (props) => {
-  const [ingredient, setIngredient] = useState({})
-  
+  const [ingredient, setIngredient] = useState({})  
   const { id } = useParams()
   let userId
   if (props.user) {
@@ -34,11 +34,25 @@ const IngredientShow = (props) => {
     description = ingredient.description.charAt(0).toUpperCase() + ingredient.description.slice(1)
   }
 
+  const redirect = (newId) => {
+    console.log(newId)
+    return (
+      <Redirect push to={`/ingredients/${newId}`} />
+    )
+  }
+
+
   return(
     <div>
       <h2>{capName}</h2>
       <h4>Measurement: {Number(ingredient.amount)} {ingredient.unit}</h4>
       {description}
+      <EditIngredientForm 
+        redirect={redirect}
+        ingredient={ingredient}
+        capName={capName}
+        user={props.user}  
+      />
     </div>
   )
 }
