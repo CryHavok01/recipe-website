@@ -26,8 +26,8 @@ class PantryMeasurementsSeeder {
       }
     ]
 
-    for(const singleIngredient of pantryMeasurementsData) {
-      await PantryMeasurement.query().insert(singleIngredient)
+    for(const singleMeasurement of pantryMeasurementsData) {
+      await PantryMeasurement.query().insert(singleMeasurement)
     }
   }
 }
