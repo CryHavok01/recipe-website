@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 
 const RecipeTile = (props) => {
 
@@ -9,8 +10,10 @@ const RecipeTile = (props) => {
 
   return (
     <div>
-      <h3>{capName}</h3>
-      <p>{props.recipe.description}</p>
+      <Link to={`/recipes/${props.recipe.id}`}>
+        <h3>{capName}</h3>
+        <p>{props.recipe.description}</p>
+      </Link>
     </div>
   )
 }

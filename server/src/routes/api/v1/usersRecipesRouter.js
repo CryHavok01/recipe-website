@@ -19,4 +19,15 @@ usersRecipesRouter.get("/", async (req, res) => {
   }
 })
 
+usersRecipesRouter.get("/:recipeId", async (req, res) => {
+  const { userId, recipeId } = req.params
+  try {
+    const recipes = await User.relatedQuery("recipes").for(userId).where("recipeId", recipeId)
+    const serializedRecipe = await RecipeSerializer.getRecipeWithDetails(recipes[0])
+    return res.status(200).json({ recipe: serializedRecipe })
+  } catch(err) {
+    return res.status(500).json({ err })
+  }
+})
+
 export default usersRecipesRouter
