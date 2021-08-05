@@ -8,7 +8,7 @@ const { ValidationError } = objection
 
 const usersRouter = new express.Router();
 
-usersRouter.use("/:userId/ingredients", usersIngredientsRouter)
+usersRouter.use("/ingredients", usersIngredientsRouter)
 
 usersRouter.post("/", async (req, res) => {
   const { email, password, passwordConfirmation } = req.body;
