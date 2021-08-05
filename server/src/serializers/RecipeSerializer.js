@@ -43,7 +43,7 @@ class RecipeSerializer {
     })
 
     serializedRecipe.steps = serializedSteps
-    serializedRecipe.ingrediets = serializedIngredients
+    serializedRecipe.ingredients = serializedIngredients
 
     return serializedRecipe
   }
