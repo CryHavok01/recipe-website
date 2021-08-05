@@ -11,7 +11,7 @@ homePageDetailsRouter.get("/:userId", async (req, res) => {
     const user = await User.query().findById(userId)
     const recipes = await user.$relatedQuery("recipes")
     const serializedRecipes = recipes.map(recipe => {
-      return RecipeSerializer.getSummary(recipe)
+      return RecipeSerializer.getRecipeInfo(recipe)
     })
 
     const ingredients = await user.$relatedQuery("ingredients")

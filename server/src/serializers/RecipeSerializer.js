@@ -1,5 +1,5 @@
 class RecipeSerializer {
-  static getSummary(recipe) {
+  static getRecipeInfo(recipe) {
     const allowedAttributes = ["name", "description", "id"]
 
     let serializedRecipe = {}

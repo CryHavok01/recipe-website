@@ -40,7 +40,9 @@ if (recipes.length > 0) {
         <button className="button">Ingredients</button>
       </Link>
       <p>You have saved {recipesNum} recipes</p>
-      <button className="button">Recipes</button>
+      <Link to="/recipes">
+        <button className="button">Recipes</button>
+      </Link>
     </div>
   )
 }
