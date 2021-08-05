@@ -7,6 +7,7 @@ const IngredientShow = (props) => {
   const [showEdit, setShowEdit] = useState(false)
   const [shouldRedirectToIngredient, setShouldRedirectToIngredient] = useState(false)
   const [shouldRedirectToList, setShouldRedirectToList] = useState(false)
+  const [noIngredient, setNoIngredient] = useState(false)
 
   let { id } = useParams()
   
@@ -14,7 +15,11 @@ const IngredientShow = (props) => {
     try {
       const response = await fetch(`/api/v1/users/ingredients/${id}`)
       const body = await response.json()
-      setIngredient(body.ingredient)
+      if(body.ingredient) {
+        setIngredient(body.ingredient)
+      } else {
+        setNoIngredient(true)
+      }
     } catch(err) {
       console.error(`Error in Fetch: ${err.message}`)
     }
@@ -69,6 +74,15 @@ const IngredientShow = (props) => {
   if (shouldRedirectToIngredient) {
     id = ingredient.id
     location.href = `/ingredients/${id}`
+  }
+
+  if (noIngredient) {
+    return(
+      <div>
+        <h1>404 Error!</h1>
+        <p>Uh oh, we can't find that ingredient!</p>
+      </div>
+    )
   }
 
   return(
