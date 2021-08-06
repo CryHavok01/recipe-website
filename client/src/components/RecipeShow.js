@@ -5,10 +5,6 @@ const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
 
   const { id } = useParams()
-  let userId
-  if (props.user) {
-    userId = props.user.id
-  }
 
   const fetchRecipeDetails = async () => {
     try {
@@ -21,10 +17,8 @@ const RecipeShow = (props) => {
   }
 
   useEffect(() => {
-    if (props.user) {
       fetchRecipeDetails()
-    }
-  }, [props.user])
+  }, [])
 
   let ingredientsList
   if(recipe.ingredients) {

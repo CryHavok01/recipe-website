@@ -61,10 +61,7 @@ const NewIngredient = (props) => {
     event.preventDefault()
     const foundError = validateData(formData)
     if (!foundError) {
-      const formPayload = {
-        newIngredient: { ...formData },
-        userId: props.user.id
-      }
+      const formPayload = { newIngredient: { ...formData } }
       try {
         const response = await fetch(`/api/v1/ingredients`, {
           method: "POST",

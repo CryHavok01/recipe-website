@@ -7,15 +7,13 @@ const IngredientsList = (props) => {
   const [ingredients, setIngredients] = useState([])
 
   const fetchIngredients = async () => {
-    if(props.user) {
-      const ingredients = await getIngredients(props.user.id)
-      setIngredients(ingredients)
-    }
+    const ingredients = await getIngredients()
+    setIngredients(ingredients)
   }
 
   useEffect(() => {
     fetchIngredients()
-  }, [props.user])
+  }, [])
 
   const ingredientsList = ingredients.map(ingredient => {
     return (

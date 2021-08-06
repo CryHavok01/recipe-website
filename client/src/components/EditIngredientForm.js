@@ -28,10 +28,8 @@ const EditIngredientForm = (props) => {
   } 
 
   useEffect(() => {
-    if (props.user) {
-      fetchIngredientDetails()
-    }
-  }, [props.user])
+    fetchIngredientDetails()
+  }, [])
 
   useEffect(() => {
       setFormData({
