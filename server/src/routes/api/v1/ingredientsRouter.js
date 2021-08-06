@@ -75,8 +75,7 @@ ingredientsRouter.delete("/", async (req, res) => {
   const { ingredientId } = req.body
   const user = req.user
   try {
-    const existingMeasurement = await user.$relatedQuery("pantryMeasurements").where("ingredientId", ingredientId).first()
-    const deleted = await PantryMeasurement.query().deleteById(existingMeasurement.id)
+    const deleted = await user.$relatedQuery("pantryMeasurements").delete().where("ingredientId", ingredientId)
     return res.status(200).json({ message: "Successful deletion" })
   } catch(err) {
     return res.status(500).json({ err })

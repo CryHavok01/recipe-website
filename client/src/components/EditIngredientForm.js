@@ -18,8 +18,10 @@ const EditIngredientForm = (props) => {
   const fetchIngredientDetails = async () => {
     try {
       const response = await fetch(`/api/v1/users/ingredients/${id}`)
-      const body = await response.json()
-      setIngredient(body.ingredient)
+      if (response.ok) {
+        const body = await response.json()
+        setIngredient(body.ingredient)
+      }
     } catch(err) {
       console.error(`Error in Fetch: ${err.message}`)
     }
