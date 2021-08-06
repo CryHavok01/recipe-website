@@ -41,6 +41,10 @@ if (recipes.length > 0) {
       <Link to="/recipes">
         <button className="button">Recipes</button>
       </Link>
+      <br />
+      <Link to="/search">
+        <button className="button">Search for New Recipes</button>
+      </Link>
     </div>
   )
 }
