@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router"
+import { useParams, Redirect } from "react-router-dom"
+import EditIngredientForm from "./EditIngredientForm"
 
 const IngredientShow = (props) => {
   const [ingredient, setIngredient] = useState({})
+  const [showEdit, setShowEdit] = useState(false)
+  const [shouldRedirectToIngredient, setShouldRedirectToIngredient] = useState(false)
+  const [shouldRedirectToList, setShouldRedirectToList] = useState(false)
+  const [noIngredient, setNoIngredient] = useState(false)
+
+  let { id } = useParams()
   
-  const { id } = useParams()
-  let userId
-  if (props.user) {
-    userId = props.user.id
-  }
   const fetchIngredientDetails = async () => {
     try {
-      const response = await fetch(`/api/v1/users/${userId}/ingredients/${id}`)
+      const response = await fetch(`/api/v1/users/ingredients/${id}`)
       const body = await response.json()
-      setIngredient(body.ingredient)
+      if(body.ingredient) {
+        setIngredient(body.ingredient)
+      } else {
+        setNoIngredient(true)
+      }
     } catch(err) {
       console.error(`Error in Fetch: ${err.message}`)
     }
@@ -25,20 +31,70 @@ const IngredientShow = (props) => {
     }
   }, [props.user])
 
-  let capName
-  let description
-  if(ingredient.name) {
-    capName = ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)
+  const handleDelete = (event) => {
+    const confirmed = confirm("Are you sure you want to remove this Ingredient from your Pantry?")
+    if (confirmed) {
+      const deletePayload = { ingredientId: ingredient.id}
+      try {
+        const response = fetch("/api/v1/ingredients", {
+          method: "DELETE",
+          headers: new Headers({
+            "Content-Type": "application/json"
+          }),
+          body: JSON.stringify(deletePayload)
+        })
+        setShouldRedirectToList(true)
+      } catch(err) {
+        console.error(`Error in fetch: ${err.message}`)
+      }
+    }
   }
-  if(ingredient.description) {
-    description = ingredient.description.charAt(0).toUpperCase() + ingredient.description.slice(1)
+
+  const editClick = (event) => {
+    setShowEdit(!showEdit)
+  }
+
+  let editForm
+  if (showEdit) {
+    editForm = (
+      <EditIngredientForm
+        setIngredient={setIngredient}
+        setShouldRedirectToIngredient={setShouldRedirectToIngredient}
+        user={props.user}  
+      />
+    )
+  }
+
+  if (shouldRedirectToList) {
+    return (
+      <Redirect push to="/ingredients" />
+    )
+  }
+
+  if (shouldRedirectToIngredient) {
+    id = ingredient.id
+    location.href = `/ingredients/${id}`
+  }
+
+  if (noIngredient) {
+    return(
+      <div>
+        <h1>404 Error!</h1>
+        <p>Uh oh, we can't find that ingredient!</p>
+      </div>
+    )
   }
 
   return(
     <div>
-      <h2>{capName}</h2>
+      <h2>{ingredient.name}</h2>
       <h4>Measurement: {Number(ingredient.amount)} {ingredient.unit}</h4>
-      {description}
+      <p>{ingredient.description}</p>
+      <div>
+        <button className="button margin-5" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
+        <button className="button margin-5" onClick={handleDelete}>Delete Ingredient</button>
+      </div>
+      {editForm}
     </div>
   )
 }
