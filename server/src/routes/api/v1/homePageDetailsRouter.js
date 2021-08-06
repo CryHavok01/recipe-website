@@ -5,10 +5,9 @@ import IngredientSerializer from "../../../serializers/IngredientSerializer.js"
 
 const homePageDetailsRouter = new express.Router()
 
-homePageDetailsRouter.get("/:userId", async (req, res) => {
-  const { userId } = req.params
+homePageDetailsRouter.get("/", async (req, res) => {
+  const user = req.user
   try {
-    const user = await User.query().findById(userId)
     const recipes = await user.$relatedQuery("recipes")
     const serializedRecipes = recipes.map(recipe => {
       return RecipeSerializer.getRecipeInfo(recipe)

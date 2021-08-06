@@ -12,7 +12,7 @@ const RecipeShow = (props) => {
 
   const fetchRecipeDetails = async () => {
     try {
-      const response = await fetch(`/api/v1/users/${userId}/recipes/${id}`)
+      const response = await fetch(`/api/v1/users/recipes/${id}`)
       const body = await response.json()
       setRecipe(body.recipe)
     } catch(err) {

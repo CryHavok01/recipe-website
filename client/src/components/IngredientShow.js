@@ -4,26 +4,22 @@ import EditIngredientForm from "./EditIngredientForm"
 
 const IngredientShow = (props) => {
   const [ingredient, setIngredient] = useState({})
-  const [formData, setFormData] = useState({
-    name: "",
-    amount: "",
-    unit: "",
-    description: ""
-  })
-  const [errors, setErrors] = useState({})
   const [showEdit, setShowEdit] = useState(false)
-  const [shouldRedirect, setShouldRedirect] = useState(false)
+  const [shouldRedirectToIngredient, setShouldRedirectToIngredient] = useState(false)
+  const [shouldRedirectToList, setShouldRedirectToList] = useState(false)
+  const [noIngredient, setNoIngredient] = useState(false)
 
-  const { id } = useParams()
-  let userId
-  if (props.user) {
-    userId = props.user.id
-  }
+  let { id } = useParams()
+  
   const fetchIngredientDetails = async () => {
     try {
-      const response = await fetch(`/api/v1/users/${userId}/ingredients/${id}`)
+      const response = await fetch(`/api/v1/users/ingredients/${id}`)
       const body = await response.json()
-      setIngredient(body.ingredient)
+      if(body.ingredient) {
+        setIngredient(body.ingredient)
+      } else {
+        setNoIngredient(true)
+      }
     } catch(err) {
       console.error(`Error in Fetch: ${err.message}`)
     }
@@ -35,81 +31,10 @@ const IngredientShow = (props) => {
     }
   }, [props.user])
 
-  const validateData = (formData) => {
-    setErrors({});
-    const { name, amount, unit } = formData
-    let foundError = false
-    let newErrors = {};
-    if (name.trim() == "") {
-      newErrors = {
-        ...newErrors,
-        name: "is required",
-      };
-      foundError = true
-    }
-
-    if (amount.trim() == "") {
-      newErrors = {
-        ...newErrors,
-        amount: "is required",
-      };
-      foundError = true
-    }
-
-
-    if (unit.trim() == "") {
-      newErrors = {
-        ...newErrors,
-        unit: "is required",
-      };
-      foundError = true
-    }
-
-    if (unit.trim() == "other") {
-      newErrors = {
-        ...newErrors,
-        unit: "please enter units"
-      }
-    }
-
-    setErrors(newErrors);
-    return foundError
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const foundError = validateData(formData)
-    if (!foundError) {
-      const formPayload = {
-        editedIngredient: { ...formData, id: ingredient.id },
-        userId: props.user.id
-      }
-      try {
-        const response = await fetch(`/api/v1/ingredients`, {
-          method: "PATCH",
-          headers: new Headers({
-            "Content-Type": "application/json"
-          }),
-          body: JSON.stringify(formPayload)
-        })
-        if(!response.ok) {
-          const errorMessage = `${response.status}: (${response.statusText})`
-          const error = new Error(errorMessage)
-          throw(error)
-        } else {
-          const body = await response.json()
-          setIngredient(body.editedIngredient)
-        }
-      } catch(error) {
-        console.error(`Error in Fetch: ${error.message}`)
-      }
-    }
-  }
-
   const handleDelete = (event) => {
     const confirmed = confirm("Are you sure you want to remove this Ingredient from your Pantry?")
     if (confirmed) {
-      const deletePayload = { userId, ingredientId: id}
+      const deletePayload = { ingredientId: ingredient.id}
       try {
         const response = fetch("/api/v1/ingredients", {
           method: "DELETE",
@@ -118,20 +43,11 @@ const IngredientShow = (props) => {
           }),
           body: JSON.stringify(deletePayload)
         })
-        setShouldRedirect(true)
+        setShouldRedirectToList(true)
       } catch(err) {
         console.error(`Error in fetch: ${err.message}`)
       }
     }
-  }
-
-  let capName
-  let description
-  if(ingredient.name) {
-    capName = ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)
-  }
-  if(ingredient.description) {
-    description = ingredient.description.charAt(0).toUpperCase() + ingredient.description.slice(1)
   }
 
   const editClick = (event) => {
@@ -142,31 +58,41 @@ const IngredientShow = (props) => {
   if (showEdit) {
     editForm = (
       <EditIngredientForm
-      formData={formData}
-      setFormData={setFormData}
-      handleSubmit={handleSubmit}
-      errors={errors}
-      ingredient={ingredient}
-      capName={capName}
-      user={props.user}  
-    />
+        setIngredient={setIngredient}
+        setShouldRedirectToIngredient={setShouldRedirectToIngredient}
+        user={props.user}  
+      />
     )
   }
 
-  if (shouldRedirect) {
+  if (shouldRedirectToList) {
     return (
       <Redirect push to="/ingredients" />
     )
   }
 
+  if (shouldRedirectToIngredient) {
+    id = ingredient.id
+    location.href = `/ingredients/${id}`
+  }
+
+  if (noIngredient) {
+    return(
+      <div>
+        <h1>404 Error!</h1>
+        <p>Uh oh, we can't find that ingredient!</p>
+      </div>
+    )
+  }
+
   return(
     <div>
-      <h2>{capName}</h2>
+      <h2>{ingredient.name}</h2>
       <h4>Measurement: {Number(ingredient.amount)} {ingredient.unit}</h4>
-      {description}
+      <p>{ingredient.description}</p>
       <div>
-        <button className="button margin" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
-        <button className="button margin" onClick={handleDelete}>Delete Ingredient</button>
+        <button className="button margin-5" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
+        <button className="button margin-5" onClick={handleDelete}>Delete Ingredient</button>
       </div>
       {editForm}
     </div>

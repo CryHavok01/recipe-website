@@ -7,6 +7,8 @@ class RecipeSerializer {
       serializedRecipe[attribute] = recipe[attribute]
     })
 
+    serializedRecipe.name = serializedRecipe.name.charAt(0).toUpperCase() + serializedRecipe.name.slice(1)
+
     return serializedRecipe
   }
 

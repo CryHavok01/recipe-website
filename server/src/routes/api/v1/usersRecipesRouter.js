@@ -5,9 +5,8 @@ import { User } from "../../../models/index.js"
 const usersRecipesRouter = new express.Router({ mergeParams: true })
 
 usersRecipesRouter.get("/", async (req, res) => {
-  const { userId } = req.params
+  const user = req.user
   try {
-    const user = await User.query().findById(userId)
     const recipes = await user.$relatedQuery("recipes")
     const serializedRecipes = recipes.map(ingredient => {
       return RecipeSerializer.getRecipeInfo(ingredient)
@@ -20,9 +19,10 @@ usersRecipesRouter.get("/", async (req, res) => {
 })
 
 usersRecipesRouter.get("/:recipeId", async (req, res) => {
-  const { userId, recipeId } = req.params
+  const { recipeId } = req.params
+  const user = req.user
   try {
-    const recipes = await User.relatedQuery("recipes").for(userId).where("recipeId", recipeId)
+    const recipes = await user.$relatedQuery("recipes").where("recipeId", recipeId)
     const serializedRecipe = await RecipeSerializer.getRecipeWithDetails(recipes[0])
     return res.status(200).json({ recipe: serializedRecipe })
   } catch(err) {

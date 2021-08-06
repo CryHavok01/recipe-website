@@ -7,6 +7,8 @@ class IngredientSerializer {
       serializedIngredient[attribute] = ingredient[attribute]
     })
 
+    serializedIngredient = this.capitalize(serializedIngredient)
+
     return serializedIngredient
   }
 
@@ -18,6 +20,16 @@ class IngredientSerializer {
       serializedIngredient[attribute] = ingredient[attribute]
     })
 
+    serializedIngredient = this.capitalize(serializedIngredient)
+    
+    return serializedIngredient
+  }
+
+  static capitalize(serializedIngredient) {
+    serializedIngredient.name = serializedIngredient.name.charAt(0).toUpperCase() + serializedIngredient.name.slice(1)
+    if (serializedIngredient.description) {
+      serializedIngredient.description = serializedIngredient.description.charAt(0).toUpperCase() + serializedIngredient.description.slice(1)
+    }
     return serializedIngredient
   }
 }

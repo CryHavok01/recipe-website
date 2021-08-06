@@ -8,7 +8,7 @@ const HomePage = (props) => {
   const fetchDetails = async () => {
     if(props.user) {
       try {
-        const response = await fetch(`/api/v1/homePage/${props.user.id}`)
+        const response = await fetch(`/api/v1/homePage/`)
         const body = await response.json()
         setIngredients(body.ingredients)
         setRecipes(body.recipes)

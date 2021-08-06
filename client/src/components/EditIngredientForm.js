@@ -1,33 +1,130 @@
 import React, { useEffect, useState } from "react"
 import FormError from "./layout/FormError"
-import { Redirect } from "react-router-dom"
+import { Redirect, useParams } from "react-router-dom"
 
 const EditIngredientForm = (props) => {
-
   const [showOther, setShowOther] = useState(false)
-  const [shouldRedirect, setShouldRedirect] = useState(false)
+  const [ingredient, setIngredient] = useState({})
+  const [formData, setFormData] = useState({
+    name: "",
+    amount: "",
+    unit: "",
+    description: ""
+  })
+  const [errors, setErrors] = useState({})
+
+  const { id } = useParams()
+  
+  const fetchIngredientDetails = async () => {
+    try {
+      const response = await fetch(`/api/v1/users/ingredients/${id}`)
+      if (response.ok) {
+        const body = await response.json()
+        setIngredient(body.ingredient)
+      }
+    } catch(err) {
+      console.error(`Error in Fetch: ${err.message}`)
+    }
+  } 
 
   useEffect(() => {
-    if(props.ingredient) {
-      props.setFormData({
-        name: props.ingredient.name,
-        amount: props.ingredient.amount,
-        unit: props.ingredient.unit,
-        description: props.ingredient.description || ""
-      })
+    if (props.user) {
+      fetchIngredientDetails()
     }
-  }, [props.ingredient])
+  }, [props.user])
+
+  useEffect(() => {
+      setFormData({
+        name: ingredient.name,
+        amount: ingredient.amount,
+        unit: ingredient.unit,
+        description: ingredient.description || ""
+      })
+  }, [ingredient])
+
+  const validateData = (formData) => {
+    setErrors({});
+    const { name, amount, unit } = formData
+    let foundError = false
+    let newErrors = {};
+    if (name.trim() == "") {
+      newErrors = {
+        ...newErrors,
+        name: "is required",
+      };
+      foundError = true
+    }
+
+    if (amount.trim() == "") {
+      newErrors = {
+        ...newErrors,
+        amount: "is required",
+      };
+      foundError = true
+    }
+
+
+    if (unit.trim() == "") {
+      newErrors = {
+        ...newErrors,
+        unit: "is required",
+      };
+      foundError = true
+    }
+
+    if (unit.trim() == "other") {
+      newErrors = {
+        ...newErrors,
+        unit: "please enter units"
+      }
+    }
+
+    setErrors(newErrors);
+    return foundError
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    const foundError = validateData(formData)
+    if (!foundError) {
+      const formPayload = {
+        editedIngredient: { ...formData, id: ingredient.id }
+      }
+      try {
+        const response = await fetch(`/api/v1/ingredients`, {
+          method: "PATCH",
+          headers: new Headers({
+            "Content-Type": "application/json"
+          }),
+          body: JSON.stringify(formPayload)
+        })
+        if(!response.ok) {
+          const errorMessage = `${response.status}: (${response.statusText})`
+          const error = new Error(errorMessage)
+          throw(error)
+        } else {
+          const body = await response.json()
+          props.setIngredient(body.editedIngredient)
+          if(ingredient.id !== body.editedIngredient.id) {
+            props.setShouldRedirectToIngredient(true)
+          }
+        }
+      } catch(error) {
+        console.error(`Error in Fetch: ${error.message}`)
+      }
+    }
+  }
 
   const handleChange = (event) => {
-    props.setFormData({
-      ...props.formData,
+    setFormData({
+      ...formData,
       [event.currentTarget.name]: event.currentTarget.value
     })
   }
 
   const handleSelect = (event) => {
-    props.setFormData({
-      ...props.formData,
+    setFormData({
+      ...formData,
       [event.currentTarget.name]: event.currentTarget.value
     })
     if (event.currentTarget.value === "other") {
@@ -46,7 +143,7 @@ const EditIngredientForm = (props) => {
             type="text" 
             id="other" 
             name="unit"
-            value={props.formData.unit}
+            value={formData.unit}
             onChange={handleChange}
           />
       </div>
@@ -55,17 +152,17 @@ const EditIngredientForm = (props) => {
 
   return(
     <div>
-      <h2>Edit Details for {props.capName}</h2>
-      <form className="callout secondary" onSubmit={props.handleSubmit}>
+      <h2>Edit Details for {ingredient.name}</h2>
+      <form className="callout secondary" onSubmit={handleSubmit}>
         <label htmlFor="name">Name: </label>
         <input 
           type="text" 
           id="name" 
           name="name" 
-          value={props.formData.name}
+          value={formData.name}
           onChange={handleChange}
         />
-        <FormError error={props.errors.name} />
+        <FormError error={errors.name} />
 
         <label htmlFor="amount">Amount: </label>
         <input 
@@ -74,14 +171,14 @@ const EditIngredientForm = (props) => {
           id="amount" 
           name="amount"
           min=".01"
-          value={props.formData.amount}
+          value={formData.amount}
           onChange={handleChange}
         />
-        <FormError error={props.errors.amount} />
+        <FormError error={errors.amount} />
 
         <label htmlFor="unit">Units: </label>
         <select id="unit" name="unit" defaultValue="select" onChange={handleSelect}>
-          <option hidden disabled value="select"> {props.formData.unit} </option>
+          <option hidden disabled value="select"> {formData.unit} </option>
           <option value="tsp">Teaspoon(s)</option>
           <option value="tbsp">Tablespoon(s)</option>
           <option value="oz">Ounce(s)</option>
@@ -90,7 +187,7 @@ const EditIngredientForm = (props) => {
         </select>
 
         {otherField}
-        <FormError error={props.errors.unit} />
+        <FormError error={errors.unit} />
 
 
         <label htmlFor="description">Description (optional): </label>
@@ -98,7 +195,7 @@ const EditIngredientForm = (props) => {
           type="text"
           id="description"
           name="description"
-          value={props.formData.description}
+          value={formData.description}
           onChange={handleChange}
         />
 
