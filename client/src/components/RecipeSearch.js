@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import apiSearch from "../services/apiSearch"
 import SearchedRecipeTile from "./SearchedRecipeTile"
 
 const RecipeSearch = (props) => {
@@ -17,17 +18,8 @@ const RecipeSearch = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      const response = await fetch("/api/v1/recipe-search", {
-        method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-        body: JSON.stringify(formData)
-      })
-      if(response.ok) {
-        const body = await response.json()
-        setSearchResults(body.searchResults)
-      }
+      const apiResults = await apiSearch(formData.searchQuery)
+      setSearchResults(apiResults)
     } catch(err) {
       console.error(`Error in fetch: ${err.message}`)
     }
@@ -36,22 +28,9 @@ const RecipeSearch = (props) => {
   const handlePageClick = async (event) => {
     event.preventDefault()
     const targetPage = event.currentTarget.getAttribute("value")
-    const pageData = {
-      targetPage,
-      searchQuery: searchResults.searchQuery
-    }
     try {
-      const response = await fetch("/api/v1/recipe-search/next", {
-        method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/json"
-        }),
-        body: JSON.stringify(pageData)
-      })
-      if(response.ok) {
-        const body = await response.json()
-        setSearchResults(body.searchResults)
-      }
+      const apiResults = await apiSearch(searchResults.searchQuery, targetPage)
+      setSearchResults(apiResults)
     } catch(err) {
       console.error(`Error in fetch: ${err.message}`)
     }
@@ -73,6 +52,9 @@ const RecipeSearch = (props) => {
   if(searchResults) {
     const totalPages  = Math.ceil(searchResults.totalResults / 10)
     const currentPage = searchResults.offset/10
+    if(totalPages <= 1) {
+      pagesDisplay = (<p>1</p>)
+    }
     let pageNums = []
     for (let x = 0; x < totalPages; x++) {
       if(x === currentPage) {
