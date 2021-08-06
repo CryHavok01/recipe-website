@@ -26,10 +26,8 @@ const IngredientShow = (props) => {
   } 
 
   useEffect(() => {
-    if (props.user) {
-      fetchIngredientDetails()
-    }
-  }, [props.user])
+    fetchIngredientDetails()
+  }, [])
 
   const handleDelete = (event) => {
     const confirmed = confirm("Are you sure you want to remove this Ingredient from your Pantry?")
@@ -60,7 +58,6 @@ const IngredientShow = (props) => {
       <EditIngredientForm
         setIngredient={setIngredient}
         setShouldRedirectToIngredient={setShouldRedirectToIngredient}
-        user={props.user}  
       />
     )
   }

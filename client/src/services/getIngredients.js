@@ -1,4 +1,4 @@
-const getIngredients = async (userId) => {
+const getIngredients = async () => {
   try {
     const response = await fetch(`/api/v1/users/ingredients`)
     const body = await response.json()

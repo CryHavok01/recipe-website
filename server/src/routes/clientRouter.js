@@ -10,7 +10,9 @@ const clientRoutes = [
   "/home", 
   "/ingredients", 
   "/ingredients/new", 
-  "/ingredients/:id"
+  "/ingredients/:id", 
+  "/recipes", 
+  "/recipes/:recipeId"
 ];
 router.get(clientRoutes, (req, res) => {
   res.sendFile(getClientIndexPath());

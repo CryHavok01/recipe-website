@@ -4,6 +4,8 @@ import OwnedIngredientsSeeder from "./seeders/IngredientsSeeder.js"
 import PantryMeasurementsSeeder from "./seeders/PantryMeasurementsSeeder.js"
 import RecipeSeeder from "./seeders/RecipesSeeder.js"
 import UsersSeeder from "./seeders/UsersSeeder.js"
+import RecipeMeasurementsSeeder from "./seeders/RecipeMeasurementsSeeder.js"
+import RecipeStepsSeeder from "./seeders/RecipeStepsSeeder.js"
 
 class Seeder {
   static async seed() {
@@ -22,6 +24,12 @@ class Seeder {
 
     console.log("Seeding pantry measurements...")
     await PantryMeasurementsSeeder.seed()
+
+    console.log("Seeding recipe measurements...")
+    await RecipeMeasurementsSeeder.seed()
+
+    console.log("Seeding recipe steps...")
+    await RecipeStepsSeeder.seed()
 
     console.log("Done!")
     await connection.destroy()

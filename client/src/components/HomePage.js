@@ -6,21 +6,19 @@ const HomePage = (props) => {
   const [recipes, setRecipes] = useState([])
 
   const fetchDetails = async () => {
-    if(props.user) {
-      try {
-        const response = await fetch(`/api/v1/homePage/`)
-        const body = await response.json()
-        setIngredients(body.ingredients)
-        setRecipes(body.recipes)
-      } catch(err) {
-        console.error(`Error in fetch: ${err.message}`)
-      }
+    try {
+      const response = await fetch(`/api/v1/homePage/`)
+      const body = await response.json()
+      setIngredients(body.ingredients)
+      setRecipes(body.recipes)
+    } catch(err) {
+      console.error(`Error in fetch: ${err.message}`)
     }
   }
 
 useEffect(() => {
   fetchDetails()
-}, [props.user])
+}, [])
 
 let ingredientsNum = 0
 if (ingredients.length > 0) {
@@ -40,7 +38,9 @@ if (recipes.length > 0) {
         <button className="button">Ingredients</button>
       </Link>
       <p>You have saved {recipesNum} recipes</p>
-      <button className="button">Recipes</button>
+      <Link to="/recipes">
+        <button className="button">Recipes</button>
+      </Link>
     </div>
   )
 }
