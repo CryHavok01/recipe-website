@@ -4,12 +4,14 @@ dotenv.config()
 const key = process.env.API_KEY
 
 class SpoonacularClient {
+  static baseUlr = "https://api.spoonacular.com/recipes/"
+  
   static async searchRecipes(searchQuery, targetPage) {
     let url
     if(targetPage) {
-      url = `https://api.spoonacular.com/recipes/complexSearch/?apiKey=${key}&query=${searchQuery}&offset=${targetPage*10}`
+      url = `${this.baseUrl}complexSearch/?apiKey=${key}&query=${searchQuery}&offset=${targetPage*10}`
     } else {
-      url = `https://api.spoonacular.com/recipes/complexSearch/?apiKey=${key}&query=${searchQuery}`
+      url = `${this.baseUlr}complexSearch/?apiKey=${key}&query=${searchQuery}`
     }
     try {
       const apiResponse = await got(url)
