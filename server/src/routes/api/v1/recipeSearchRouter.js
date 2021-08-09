@@ -4,9 +4,7 @@ import SpoonacularClient from "../../../apiClient/SpoonacularClient.js"
 const recipeSearchRouter = new express.Router()
 
 recipeSearchRouter.get("/", async (req, res) => {
-  console.log("/")
   const { targetPage, searchQuery } = req.query
-  console.log(targetPage, searchQuery)
   try {
     const spoonData = await SpoonacularClient.searchRecipes(searchQuery, targetPage)
     spoonData.searchQuery = searchQuery
@@ -18,7 +16,6 @@ recipeSearchRouter.get("/", async (req, res) => {
 })
 
 recipeSearchRouter.get("/:id", async (req, res) => {
-  console.log("/stuff")
   const { id } = req.params
   try {
     const spoonData = await SpoonacularClient.getRecipeData(id)

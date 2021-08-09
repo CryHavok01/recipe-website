@@ -30,7 +30,6 @@ const RecipeSearch = (props) => {
     const targetPage = event.currentTarget.getAttribute("value")
     try {
       const apiResults = await apiSearch(searchResults.searchQuery, targetPage)
-      console.log(apiResults)
       setSearchResults(apiResults)
     } catch(err) {
       console.error(`Error in fetch: ${err.message}`)
