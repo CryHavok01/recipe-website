@@ -30,6 +30,7 @@ const RecipeSearch = (props) => {
     const targetPage = event.currentTarget.getAttribute("value")
     try {
       const apiResults = await apiSearch(searchResults.searchQuery, targetPage)
+      console.log(apiResults)
       setSearchResults(apiResults)
     } catch(err) {
       console.error(`Error in fetch: ${err.message}`)
@@ -108,7 +109,7 @@ const RecipeSearch = (props) => {
 
   return(
       <div>
-      <h1>howdy</h1>
+      <h1>Search for New Recipes</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Search: 
