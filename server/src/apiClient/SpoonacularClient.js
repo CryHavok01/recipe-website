@@ -14,7 +14,6 @@ class SpoonacularClient {
       url = `${this.baseUrl}complexSearch/?apiKey=${key}&query=${searchQuery}`
     }
     try {
-      console.log(url)
       const apiResponse = await got(url)
       const responseBody = apiResponse.body
       return JSON.parse(responseBody)

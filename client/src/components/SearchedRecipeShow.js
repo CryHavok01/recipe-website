@@ -47,6 +47,7 @@ const SearchedRecipeShow = (props) => {
   return(
     <div>
       <h1>{recipe.title}</h1>
+      <img src={recipe.image} alt={`A picture of ${recipe.title}`}/>
       <h3>Ingredients:</h3>
       <ul>
         {ingredientsList}
