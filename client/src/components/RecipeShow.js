@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
-import getIngredients from "../services/getIngredients"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
