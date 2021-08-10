@@ -21,8 +21,13 @@ const RecipeShow = (props) => {
   }
 
   const fetchPantryIngredients = async () => {
-    const pantryIngredients = await getIngredients()
-    setPantryIngredients(pantryIngredients)
+    try {
+      const response = await fetch(`/api/v1/users/ingredients/all`)
+      const body = await response.json()
+      setPantryIngredients(body.ingredients)
+    } catch(err) {
+      console.error(`Error in fetch: ${err.message}`)
+    }
   }
 
   useEffect(() => {
