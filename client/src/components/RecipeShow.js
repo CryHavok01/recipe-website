@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
+import getIngredients from "../services/getIngredients"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
+  const [recipeIngredients, setRecipeIngredients] = useState([])
+  const [pantryIngredients, setPantryIngredients] = useState([])
 
   const { id } = useParams()
 
@@ -11,18 +14,23 @@ const RecipeShow = (props) => {
       const response = await fetch(`/api/v1/users/recipes/${id}`)
       const body = await response.json()
       setRecipe(body.recipe)
+      setRecipeIngredients(body.recipe.ingredients)
     } catch(err) {
       console.error(`Error in Fetch: ${err.message}`)
     }
   }
 
+  const fetchPantryIngredients = async () => {
+    const pantryIngredients = await getIngredients()
+    setPantryIngredients(pantryIngredients)
+  }
+
   useEffect(() => {
       fetchRecipeDetails()
+      fetchPantryIngredients()
   }, [])
 
-  let ingredientsList
-  if(recipe.ingredients) {
-    ingredientsList = recipe.ingredients.map(ingredient => {
+  const ingredientsList = recipeIngredients.map(ingredient => {
       return (
         <div key={ingredient.id}>
           <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
@@ -30,7 +38,6 @@ const RecipeShow = (props) => {
         </div>
       )
     })
-  }
 
   let stepsList
   if(recipe.steps) {
