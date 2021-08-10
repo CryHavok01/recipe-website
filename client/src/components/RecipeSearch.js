@@ -108,7 +108,7 @@ const RecipeSearch = (props) => {
 
   return(
       <div>
-      <h1>howdy</h1>
+      <h1>Search for New Recipes</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Search: 

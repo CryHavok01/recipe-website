@@ -15,6 +15,7 @@ import NewIngredient from "./NewIngredient";
 import RecipeList from "./RecipeList";
 import RecipeShow from "./RecipeShow";
 import RecipeSearch from "./RecipeSearch";
+import SearchedRecipeShow from "./SearchedRecipeShow";
 
 const App = (props) => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -44,6 +45,7 @@ const App = (props) => {
         <AuthenticatedRoute exact path="/recipes" component={RecipeList} user={currentUser} />
         <AuthenticatedRoute exact path="/recipes/:id" component={RecipeShow} user={currentUser} />
         <AuthenticatedRoute exact path="/search" component={RecipeSearch} user={currentUser} />
+        <AuthenticatedRoute exact path="/search/:id" component={SearchedRecipeShow} user={currentUser} />
       </Switch>
     </Router>
   );

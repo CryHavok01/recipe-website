@@ -10,6 +10,17 @@ recipeSearchRouter.get("/", async (req, res) => {
     spoonData.searchQuery = searchQuery
     return res.status(200).json({ searchResults: spoonData })
   } catch(err) {
+    console.log(err)
+    return res.status(500).json({ err })
+  }
+})
+
+recipeSearchRouter.get("/:id", async (req, res) => {
+  const { id } = req.params
+  try {
+    const spoonData = await SpoonacularClient.getRecipeData(id)
+    return res.status(200).json({ recipe: spoonData })
+  } catch(err) {
     return res.status(500).json({ err })
   }
 })
