@@ -34,7 +34,25 @@ const RecipeShow = (props) => {
       fetchPantryIngredients()
   }, [])
 
+  const compareIngredient = (ingredient, pantry) => {
+    const ingredientInPantry = pantry.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
+    if(ingredientInPantry) {
+      if(ingredientInPantry.unit === ingredient.unit) {
+        if(ingredientInPantry.amount >= ingredient.amount) {
+          return "have enough"
+        } else {
+          return "need more"
+        }
+      } else {
+        
+      }
+    }
+    return ingredientInPantry
+  }
+
   const ingredientsList = recipeIngredients.map(ingredient => {
+    const ingredientInPantry = compareIngredient(ingredient, pantryIngredients)
+    console.log(ingredientInPantry)
       return (
         <div key={ingredient.id}>
           <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
