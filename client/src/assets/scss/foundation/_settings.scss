@@ -78,7 +78,9 @@ $foundation-palette: (
   shadow: rgb(134, 131, 109),
   key-lime: rgb(236, 254, 170),
   khaki: rgb(226, 222, 132),
-  dim-grey: rgb(98, 98, 103)
+  dim-grey: rgb(98, 98, 103),
+  grey: #f5f6f8,
+  blue: #002684
 );
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
@@ -877,7 +879,7 @@ $tooltip-radius: $global-radius;
 // -----------
 
 $topbar-padding: 0.5rem;
-$topbar-background: rgb(98, 98, 103);
+$topbar-background: #002684;
 $topbar-submenu-background: $topbar-background;
 $topbar-title-spacing: 0.5rem 1rem 0.5rem 0;
 $topbar-input-width: 200px;

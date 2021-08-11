@@ -37,7 +37,7 @@ const RecipeShow = (props) => {
     stepsList = recipe.steps.map(step => {
       return(
         <div key={step.id}>
-          <p>{step.number}: {step.step}</p>
+          <li>{step.step}</li>
         </div>
       )
     })
@@ -45,19 +45,21 @@ const RecipeShow = (props) => {
 
 
   return(
-    <div className="grid-container">
-      <h1>{recipe.name}</h1>
+    <div className="grid-container center">
+      <h1 className="title">{recipe.name}</h1>
       <h2>{recipe.description}</h2>
-      <div className="grid-x grid-margin-x">
-        <div className="cell medium-6 callout khaki">
+      <div className="grid-x grid-margin-x left">
+        <div className="cell medium-6 callout">
           <h3>Ingredients: </h3>
           <ul>
             {ingredientsList}
           </ul>
         </div>
-        <div className="cell medium-6 callout khaki">
+        <div className="cell medium-6 callout">
           <h3>Instructions: </h3>
-          {stepsList}
+          <ol>
+            {stepsList}
+          </ol>
         </div>
       </div>
     </div>

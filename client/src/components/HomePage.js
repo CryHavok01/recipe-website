@@ -31,20 +31,36 @@ if (recipes.length > 0) {
 }
 
   return (
-    <div className="grid-container">
-      <h1>Your Home Page</h1>
-      <p>You currently have {ingredientsNum} ingredients in your kitchen</p>
-      <Link to="/ingredients">
-        <button className="button misty-moss">Ingredients</button>
-      </Link>
-      <p>You have saved {recipesNum} recipes</p>
-      <Link to="/recipes">
-        <button className="button misty-moss">Recipes</button>
-      </Link>
-      <br />
-      <Link to="/search">
-        <button className="button misty-moss">Search for New Recipes</button>
-      </Link>
+    <div className="grid-container center">
+      <h1 className="title">Your Home Page</h1>
+      <div class="callout">
+        <div className="grid-x margin-x">
+          <div className="cell small-4 left">
+            <p>You currently have {ingredientsNum} ingredients in your kitchen</p>
+          </div>
+          <div className="cell small-4"></div>
+          <div className="cell small-4">
+            <Link to="/ingredients">
+              <button className="button round blue">Ingredients</button>
+            </Link>
+          </div>
+        </div>
+        <div className="grid-x margin-x">
+          <div className="cell small-4 left">
+            <p>You have {recipesNum} saved recipes</p>
+          </div>
+          <div className="cell small-4"></div>
+          <div className="cell small-4">
+            <Link to="/recipes">
+              <button className="button blue round">Recipes</button>
+            </Link>
+          </div>
+        </div>
+        <br />
+        <Link to="/search">
+          <button className="button blue round">Search for New Recipes</button>
+        </Link>
+      </div>
     </div>
   )
 }

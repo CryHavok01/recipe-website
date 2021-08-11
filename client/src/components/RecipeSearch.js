@@ -77,7 +77,7 @@ const RecipeSearch = (props) => {
     if(currentPage > 0) {
       backButton = (
         <button
-          className="button misty-moss"
+          className="button blue"
           value={currentPage-1}
           onClick={handlePageClick}
         >
@@ -89,7 +89,7 @@ const RecipeSearch = (props) => {
     if(currentPage < totalPages-1) {
       nextButton = (
         <button
-          className="button misty-moss"
+          className="button blue"
           value={currentPage+1}
           onClick={handlePageClick}
         >
@@ -116,15 +116,15 @@ const RecipeSearch = (props) => {
   }
 
   return(
-    <div className="grid-container">
-      <h1>Search for New Recipes</h1>
+    <div className="grid-container center">
+      <h1 className="title">Search for New Recipes</h1>
       <form onSubmit={handleSubmit}>
         <div className="grid-x">
-          <div className="cell small-10">
+          <div className="cell small-11">
             <input type="text" name="searchQuery" value={formData.searchQuery} onChange={handleChange} />
           </div>
-          <div className="cell small-2">
-            <input type="submit" className="button misty-moss" value="Search" />
+          <div className="cell small-1">
+            <input type="submit" className="button blue round" value="Search" />
           </div>
         </div>
       </form>

@@ -135,7 +135,7 @@ const RegistrationForm = () => {
           </label>
         </div>
         <div>
-          <input type="submit" className="button misty-moss" value="Register" />
+          <input type="submit" className="button blue round" value="Register" />
         </div>
       </form>
     </div>

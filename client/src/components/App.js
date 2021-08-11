@@ -33,8 +33,8 @@ const App = (props) => {
       <TopBar user={currentUser} />
       <Switch>
         <Route exact path="/">
-          <div className="grid-container">
-            <h1>Welcome to Josh's Kitchen</h1>
+          <div className="grid-container center">
+            <h1 className="title">Welcome to Josh's Kitchen</h1>
             <p>This is a website designed to help you keep track of your favorite recipes, as well as all the various ingredients you have in your own kitchen.  Get started by adding information about the ingredients you own, and then you can search for recipes that look tasty or add your own.  Once you select a recipe, we'll let you know if you have enough ingredients to make it, or let you know which things you should go shopping for.  If you're ready to get cooking, you can press the big green button and we'll automatically update your ingredients by subtracting the amounts you use in that recipe.  Sign up for a new account, or sign in to an existing one to get cooking!</p>
           </div>
         </Route>
