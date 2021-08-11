@@ -10,7 +10,21 @@ recipeSearchRouter.get("/", async (req, res) => {
     spoonData.searchQuery = searchQuery
     return res.status(200).json({ searchResults: spoonData })
   } catch(err) {
-    console.log(err)
+    return res.status(500).json({ err })
+  }
+})
+
+recipeSearchRouter.get("/saved", async (req, res) => {
+  const { spoonacularId } = req.query
+  const user = req.user
+  try {
+    const savedRecipe = await user.$relatedQuery("recipes").findOne({ spoonacularId })
+    if(savedRecipe) {
+      return res.status(200).json({ saved: true })
+    } else {
+      return res.status(200).json({ saved: false })
+    }
+  } catch(err) {
     return res.status(500).json({ err })
   }
 })
@@ -24,5 +38,6 @@ recipeSearchRouter.get("/:id", async (req, res) => {
     return res.status(500).json({ err })
   }
 })
+
 
 export default recipeSearchRouter
