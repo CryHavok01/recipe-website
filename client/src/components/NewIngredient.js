@@ -131,9 +131,9 @@ const NewIngredient = (props) => {
   }
 
   return(
-    <div>
+    <div className="grid-container">
       <h2>Add Your New Ingredient</h2>
-      <form className="callout secondary" onSubmit={handleSubmit}>
+      <form className="callout misty-moss" onSubmit={handleSubmit}>
         <ErrorList errors={serverErrors} />
         <label htmlFor="name">Name: </label>
         <input 
@@ -184,7 +184,7 @@ const NewIngredient = (props) => {
         <input 
           type="submit" 
           value="Submit"
-          className="button"
+          className="button misty-moss"
         />
       </form>
     </div>

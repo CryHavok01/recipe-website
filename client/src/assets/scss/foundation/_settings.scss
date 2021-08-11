@@ -74,6 +74,11 @@ $foundation-palette: (
   success: #3adb76,
   warning: #ffae00,
   alert: #cc4b37,
+  misty-moss: rgb(166, 166, 112),
+  shadow: rgb(134, 131, 109),
+  key-lime: rgb(236, 254, 170),
+  khaki: rgb(226, 222, 132),
+  dim-grey: rgb(98, 98, 103)
 );
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
@@ -872,7 +877,7 @@ $tooltip-radius: $global-radius;
 // -----------
 
 $topbar-padding: 0.5rem;
-$topbar-background: $light-gray;
+$topbar-background: rgb(98, 98, 103);
 $topbar-submenu-background: $topbar-background;
 $topbar-title-spacing: 0.5rem 1rem 0.5rem 0;
 $topbar-input-width: 200px;

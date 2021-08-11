@@ -24,10 +24,10 @@ const RecipeShow = (props) => {
   if(recipe.ingredients) {
     ingredientsList = recipe.ingredients.map(ingredient => {
       return (
-        <div key={ingredient.id}>
+        <li key={ingredient.id}>
           <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
           <p>{ingredient.description}</p>
-        </div>
+        </li>
       )
     })
   }
@@ -45,13 +45,21 @@ const RecipeShow = (props) => {
 
 
   return(
-    <div>
+    <div className="grid-container">
       <h1>{recipe.name}</h1>
       <h2>{recipe.description}</h2>
-      <h3>Ingredients: </h3>
-      {ingredientsList}
-      <h3>Instructions: </h3>
-      {stepsList}
+      <div className="grid-x grid-margin-x">
+        <div className="cell medium-6 callout khaki">
+          <h3>Ingredients: </h3>
+          <ul>
+            {ingredientsList}
+          </ul>
+        </div>
+        <div className="cell medium-6 callout khaki">
+          <h3>Instructions: </h3>
+          {stepsList}
+        </div>
+      </div>
     </div>
   )
 }

@@ -31,19 +31,19 @@ if (recipes.length > 0) {
 }
 
   return (
-    <div>
+    <div className="grid-container">
       <h1>Your Home Page</h1>
       <p>You currently have {ingredientsNum} ingredients in your kitchen</p>
       <Link to="/ingredients">
-        <button className="button">Ingredients</button>
+        <button className="button misty-moss">Ingredients</button>
       </Link>
       <p>You have saved {recipesNum} recipes</p>
       <Link to="/recipes">
-        <button className="button">Recipes</button>
+        <button className="button misty-moss">Recipes</button>
       </Link>
       <br />
       <Link to="/search">
-        <button className="button">Search for New Recipes</button>
+        <button className="button misty-moss">Search for New Recipes</button>
       </Link>
     </div>
   )

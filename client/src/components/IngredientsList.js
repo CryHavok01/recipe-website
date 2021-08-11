@@ -25,14 +25,20 @@ const IngredientsList = (props) => {
   })
 
   return (
-    <div className="callout">
-      <div>
-        <h1 className="same_line">What's in Your Pantry?</h1>
-        <Link to="/ingredients/new" className="button same_line align_right">
-          Add New Ingredient
-        </Link>
+    <div className="grid-container">
+      <div className="grid-x align-center">
+        <div className="cell small-8">
+          <h1>What's in Your Pantry?</h1>
+        </div>
+        <div className="cell small-4">
+          <Link to="/ingredients/new" className="button misty-moss middle">
+            Add New Ingredient
+          </Link>
+        </div>
       </div>
-      {ingredientsList}
+      <div className="callout khaki">
+        {ingredientsList}
+      </div>
     </div>
   )
 }

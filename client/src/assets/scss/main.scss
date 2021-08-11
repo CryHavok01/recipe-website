@@ -13,6 +13,11 @@
   tab-size: 4;
 }
 
+body {
+  background-color: rgb(236, 254, 170);
+  color: rgb(98, 98, 103);
+}
+
 .same_line {
   display: inline;
 }
@@ -23,4 +28,31 @@
 
 .margin-5 {
   margin: 5px;
+}
+
+.align-center {
+  height: 75px;
+  display: flex;
+  align-items: center;
+}
+
+
+.light-link {
+  color: rgb(236, 254, 170)
+}
+
+.light-text {
+  color: rgb(226, 222, 132)
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: end;
+}
+
+.inline {
+  display: inline;
 }

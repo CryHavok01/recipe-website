@@ -24,9 +24,11 @@ const RecipeList = (props) => {
   })
 
   return(
-    <div>
+    <div className="grid-container">
       <h1>Recipes in Your Cookbook</h1>
-      {recipesList}
+      <div className="callout khaki">
+        {recipesList}
+      </div>
     </div>
 
   )

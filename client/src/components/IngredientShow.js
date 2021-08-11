@@ -83,13 +83,19 @@ const IngredientShow = (props) => {
   }
 
   return(
-    <div>
-      <h2>{ingredient.name}</h2>
-      <h4>Measurement: {Number(ingredient.amount)} {ingredient.unit}</h4>
-      <p>{ingredient.description}</p>
+    <div className="grid-container">
       <div>
-        <button className="button margin-5" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
-        <button className="button margin-5" onClick={handleDelete}>Delete Ingredient</button>
+        <h2>{ingredient.name}</h2>
+        <h4>Measurement: {Number(ingredient.amount)} {ingredient.unit}</h4>
+        <p>{ingredient.description}</p>
+      </div>
+      <div className="grid-x">
+        <div className="cell small-2">
+          <button className="button misty-moss" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
+        </div>
+        <div className="cell small-2">
+          <button className="button misty-moss" onClick={handleDelete}>Delete Ingredient</button>
+        </div>
       </div>
       {editForm}
     </div>

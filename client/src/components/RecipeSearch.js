@@ -31,6 +31,7 @@ const RecipeSearch = (props) => {
     try {
       const apiResults = await apiSearch(searchResults.searchQuery, targetPage)
       setSearchResults(apiResults)
+      window.scrollTo(0, 0)
     } catch(err) {
       console.error(`Error in fetch: ${err.message}`)
     }
@@ -76,7 +77,7 @@ const RecipeSearch = (props) => {
     if(currentPage > 0) {
       backButton = (
         <button
-          className="button"
+          className="button misty-moss"
           value={currentPage-1}
           onClick={handlePageClick}
         >
@@ -88,7 +89,7 @@ const RecipeSearch = (props) => {
     if(currentPage < totalPages-1) {
       nextButton = (
         <button
-          className="button"
+          className="button misty-moss"
           value={currentPage+1}
           onClick={handlePageClick}
         >
@@ -98,22 +99,34 @@ const RecipeSearch = (props) => {
     }
     
     pagesDisplay = (
-      <div>
-        {backButton}
-        {pageNums}
-        {nextButton}
+      <div className="grid-x margin-x">
+        <div className="cell auto"></div>
+        <div className="cell small-1 right">
+          {backButton}
+        </div>
+        <div className="cell small-1 center">
+          {pageNums}
+        </div>
+        <div className="cell small-1">
+          {nextButton}
+        </div>
+        <div className="cell auto"></div>
       </div>
     )
   }
 
   return(
-      <div>
+    <div className="grid-container">
       <h1>Search for New Recipes</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Search: 
-          <input type="text" name="searchQuery" value={formData.searchQuery} onChange={handleChange} />
-        </label>
+        <div className="grid-x">
+          <div className="cell small-10">
+            <input type="text" name="searchQuery" value={formData.searchQuery} onChange={handleChange} />
+          </div>
+          <div className="cell small-2">
+            <input type="submit" className="button misty-moss" value="Search" />
+          </div>
+        </div>
       </form>
       {searchList}
       {pagesDisplay}
