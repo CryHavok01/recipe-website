@@ -136,7 +136,7 @@ const RecipeShow = (props) => {
       } else if(ingredientInPantry === "need more") {
         amountNote = <p className="red">You don't have enough of this ingredient</p>
       } else if(ingredientInPantry === "can't tell") {
-        amountNote = <p className="yellow">I can't tell if you have enough of this ingredient</p>
+        amountNote = <p className="yellow">We can't tell if you have enough of this ingredient</p>
       } else if(ingredientInPantry === "it's close") {
         amountNote = <p className="yellow">You have just about enough, but you might run out of this ingredient</p>
     } else if(ingredientInPantry === "have enough") {
