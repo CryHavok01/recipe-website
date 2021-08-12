@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
+import Ingredients from "../services/Ingredients"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
@@ -44,19 +45,43 @@ const RecipeShow = (props) => {
           return "need more"
         }
       } else {
-        
+        const convertedRecipeIngredient = Ingredients.convertIngredient(ingredient)
+        const convertedPantryIngredient = Ingredients.convertIngredient(ingredientInPantry)
+        if (!convertedRecipeIngredient || !convertedPantryIngredient) {
+          return "can't tell"
+        } else {
+          if (convertedPantryIngredient - 3 >= convertedRecipeIngredient) {
+            return "have enough"
+          } else if (convertedPantryIngredient + 3 <= convertedRecipeIngredient) {
+            return "need more"
+          } else {
+            return "it's close"
+          }
+        }
       }
     }
-    return ingredientInPantry
+    return "don't have"
   }
 
   const ingredientsList = recipeIngredients.map(ingredient => {
     const ingredientInPantry = compareIngredient(ingredient, pantryIngredients)
-    console.log(ingredientInPantry)
+    let amountNote
+    if(ingredientInPantry === "don't have") {
+      amountNote = <p className="red">It looks like you don't have this ingredient</p>
+    } else if(ingredientInPantry === "need more") {
+      amountNote = <p className="red">You don't have enough of this ingredient</p>
+    } else if(ingredientInPantry === "can't tell") {
+      amountNote = <p className="yellow">I can't tell if you have enough of this ingredient</p>
+    } else if(ingredientInPantry === "it's close") {
+      amountNote = <p className="yellow">You have just about enough, but you might run out of this ingredient</p>
+    } else if(ingredientInPantry === "have enough") {
+      amountNote = <p className="green">You have more than enough of this ingredient</p>
+    }
       return (
         <div key={ingredient.id}>
           <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
           <p>{ingredient.description}</p>
+          {amountNote}
         </div>
       )
     })
