@@ -37,9 +37,6 @@ class Ingredients {
     } else if (this.teaspoons.includes(ingredientTotal.unit)) {
       updatedTotal = newConvertedTotal
     }
-    if(updatedTotal <= 0) {
-      updatedTotal = 0.01
-    }
     return updatedTotal
   }
 }

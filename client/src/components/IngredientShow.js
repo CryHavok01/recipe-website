@@ -57,6 +57,7 @@ const IngredientShow = (props) => {
     editForm = (
       <EditIngredientForm
         setIngredient={setIngredient}
+        setShowEdit={setShowEdit}
         setShouldRedirectToIngredient={setShouldRedirectToIngredient}
       />
     )
@@ -82,10 +83,17 @@ const IngredientShow = (props) => {
     )
   }
 
+  let measurement
+  if (ingredient.amount > 0.01) {
+    measurement = <h4>Measurement: {Number(ingredient.amount)} {ingredient.unit}</h4>
+  } else {
+    measurement = <h4>You're all out of this ingredient!</h4>
+  }
+
   return(
     <div>
       <h2>{ingredient.name}</h2>
-      <h4>Measurement: {Number(ingredient.amount)} {ingredient.unit}</h4>
+      {measurement}
       <p>{ingredient.description}</p>
       <div>
         <button className="button margin-5" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>

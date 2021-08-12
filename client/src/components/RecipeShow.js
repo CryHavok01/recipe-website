@@ -6,6 +6,8 @@ const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
   const [recipeIngredients, setRecipeIngredients] = useState([])
   const [pantryIngredients, setPantryIngredients] = useState([])
+  const [updatedIngredients, setUpdatedIngredients] = useState([])
+  const [made, setMade] = useState(false)
 
   const { id } = useParams()
 
@@ -33,47 +35,135 @@ const RecipeShow = (props) => {
   useEffect(() => {
       fetchRecipeDetails()
       fetchPantryIngredients()
-  }, [])
+    }, [])
 
-  const compareIngredient = (ingredient, pantry) => {
-    const ingredientInPantry = pantry.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
-    if(ingredientInPantry) {
-      if(ingredientInPantry.unit === ingredient.unit) {
-        if(ingredientInPantry.amount >= ingredient.amount) {
-          return "have enough"
-        } else {
-          return "need more"
-        }
-      } else {
-        const convertedRecipeIngredient = Ingredients.convertIngredient(ingredient)
-        const convertedPantryIngredient = Ingredients.convertIngredient(ingredientInPantry)
-        if (!convertedRecipeIngredient || !convertedPantryIngredient) {
-          return "can't tell"
-        } else {
-          if (convertedPantryIngredient - 3 >= convertedRecipeIngredient) {
-            return "have enough"
-          } else if (convertedPantryIngredient + 3 <= convertedRecipeIngredient) {
-            return "need more"
+    useEffect(() => {
+      if(recipeIngredients.length > 0) {
+        getNewTotals()
+      }
+    }, [recipeIngredients, pantryIngredients])
+
+    const getNewTotals = () => {
+      let ingredientsToUpdate = recipeIngredients.map(ingredient => {
+        const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
+        if(ingredientInPantry) {
+          if(ingredientInPantry.unit === ingredient.unit) {
+            if(ingredientInPantry.amount >= ingredient.amount) {
+              const updatedIngredient = {
+                ...ingredientInPantry,
+                amount: ingredientInPantry.amount - ingredient.amount
+              }
+              return updatedIngredient
+            } else {
+              const updatedIngredient = {
+                ...ingredientInPantry,
+                amount: ingredientInPantry.amount - ingredient.amount
+              }
+              return updatedIngredient
+            }
           } else {
-            return "it's close"
+            const convertedRecipeIngredient = Ingredients.convertIngredient(ingredient)
+            const convertedPantryIngredient = Ingredients.convertIngredient(ingredientInPantry)
+            if (!convertedRecipeIngredient || !convertedPantryIngredient) {
+              return false
+            } else {
+              if (convertedPantryIngredient - 3 >= convertedRecipeIngredient) {
+                const newTotal = Ingredients.convertAndUpdate(ingredientInPantry, ingredient)
+                const updatedIngredient = {
+                  ...ingredientInPantry,
+                  amount: newTotal
+                }
+                return updatedIngredient
+              } else if (convertedPantryIngredient + 3 <= convertedRecipeIngredient) {
+                const newTotal = Ingredients.convertAndUpdate(ingredientInPantry, ingredient)
+                const updatedIngredient = {
+                  ...ingredientInPantry,
+                  amount: newTotal
+                }
+                return updatedIngredient
+              } else {
+                const newTotal = Ingredients.convertAndUpdate(ingredientInPantry, ingredient)
+                const updatedIngredient = {
+                  ...ingredientInPantry,
+                  amount: newTotal
+                }
+                return updatedIngredient
+              }
+            }
+          }
+        } else {
+          return false
+        }
+      })
+      setUpdatedIngredients(ingredientsToUpdate)
+    }
+    
+    const compareIngredient = (ingredient) => {
+      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
+      if(ingredientInPantry) {
+        if(ingredientInPantry.unit === ingredient.unit) {
+          if(ingredientInPantry.amount >= ingredient.amount) {
+            return "have enough"
+          } else {
+            return "need more"
+          }
+        } else {
+          const convertedRecipeIngredient = Ingredients.convertIngredient(ingredient)
+          const convertedPantryIngredient = Ingredients.convertIngredient(ingredientInPantry)
+          if (!convertedRecipeIngredient || !convertedPantryIngredient) {
+            return "can't tell"
+          } else {
+            if (convertedPantryIngredient - 3 >= convertedRecipeIngredient) {
+              return "have enough"
+            } else if (convertedPantryIngredient + 3 <= convertedRecipeIngredient) {
+              return "need more"
+            } else {
+              return "it's close"
+            }
           }
         }
+      } else {
+        return "don't have"
       }
     }
-    return "don't have"
-  }
 
-  const ingredientsList = recipeIngredients.map(ingredient => {
-    const ingredientInPantry = compareIngredient(ingredient, pantryIngredients)
-    let amountNote
-    if(ingredientInPantry === "don't have") {
-      amountNote = <p className="red">It looks like you don't have this ingredient</p>
-    } else if(ingredientInPantry === "need more") {
-      amountNote = <p className="red">You don't have enough of this ingredient</p>
-    } else if(ingredientInPantry === "can't tell") {
-      amountNote = <p className="yellow">I can't tell if you have enough of this ingredient</p>
-    } else if(ingredientInPantry === "it's close") {
-      amountNote = <p className="yellow">You have just about enough, but you might run out of this ingredient</p>
+    const makeRecipe = async (event) => {
+      let updatedIngredientData = updatedIngredients.filter(element => element)
+      updatedIngredientData.forEach(ingredient => {
+        ingredient.amount = Number(ingredient.amount.toFixed(2))
+        if(ingredient.amount <= 0) {
+          ingredient.amount = 0.01
+        }
+      })
+      try {
+        const response = await fetch("/api/v1/recipes/make", {
+          method: "POST",
+          headers: new Headers({
+            "Content-Type": "application/json"
+          }),
+          body: JSON.stringify(updatedIngredientData)
+        })
+        if(response.ok) {
+          fetchPantryIngredients()
+          console.log(updatedIngredients)
+          setMade(true)
+        }
+      } catch(err) {
+        console.error(`Error in Fetch: ${err.message}`)
+      }
+    }
+
+    const ingredientsList = recipeIngredients.map(ingredient => {
+      const ingredientInPantry = compareIngredient(ingredient)
+      let amountNote
+      if(ingredientInPantry === "don't have") {
+        amountNote = <p className="red">It looks like you don't have this ingredient</p>
+      } else if(ingredientInPantry === "need more") {
+        amountNote = <p className="red">You don't have enough of this ingredient</p>
+      } else if(ingredientInPantry === "can't tell") {
+        amountNote = <p className="yellow">I can't tell if you have enough of this ingredient</p>
+      } else if(ingredientInPantry === "it's close") {
+        amountNote = <p className="yellow">You have just about enough, but you might run out of this ingredient</p>
     } else if(ingredientInPantry === "have enough") {
       amountNote = <p className="green">You have more than enough of this ingredient</p>
     }
@@ -97,15 +187,21 @@ const RecipeShow = (props) => {
     })
   }
 
+  let madeNotice
+  if(made) {
+    madeNotice = <p>You made food!  Great job!</p>
+  }
 
   return(
     <div>
       <h1>{recipe.name}</h1>
       <h2>{recipe.description}</h2>
+      {madeNotice}
       <h3>Ingredients: </h3>
       {ingredientsList}
       <h3>Instructions: </h3>
       {stepsList}
+      <button className="button blue round" onClick={makeRecipe}>Make this Recipe</button>
     </div>
   )
 }
