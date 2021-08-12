@@ -164,7 +164,7 @@ const RecipeShow = (props) => {
 
   let madeNotice
   if(made) {
-    madeNotice = <p>You made food!  Great job!</p>
+    madeNotice = <p>We've updated your ingredients for you.  Enjoy your food!</p>
   }
 
   return(
