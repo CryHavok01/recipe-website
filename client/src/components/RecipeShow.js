@@ -48,47 +48,23 @@ const RecipeShow = (props) => {
         const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
         if(ingredientInPantry) {
           if(ingredientInPantry.unit === ingredient.unit) {
-            if(ingredientInPantry.amount >= ingredient.amount) {
-              const updatedIngredient = {
-                ...ingredientInPantry,
-                amount: ingredientInPantry.amount - ingredient.amount
-              }
-              return updatedIngredient
-            } else {
-              const updatedIngredient = {
-                ...ingredientInPantry,
-                amount: ingredientInPantry.amount - ingredient.amount
-              }
-              return updatedIngredient
+            const updatedIngredient = {
+              ...ingredientInPantry,
+              amount: ingredientInPantry.amount - ingredient.amount
             }
-          } else {
+            return updatedIngredient
+            } else {
             const convertedRecipeIngredient = Ingredients.convertIngredient(ingredient)
             const convertedPantryIngredient = Ingredients.convertIngredient(ingredientInPantry)
             if (!convertedRecipeIngredient || !convertedPantryIngredient) {
               return false
             } else {
-              if (convertedPantryIngredient - 3 >= convertedRecipeIngredient) {
-                const newTotal = Ingredients.convertAndUpdate(ingredientInPantry, ingredient)
-                const updatedIngredient = {
-                  ...ingredientInPantry,
-                  amount: newTotal
-                }
-                return updatedIngredient
-              } else if (convertedPantryIngredient + 3 <= convertedRecipeIngredient) {
-                const newTotal = Ingredients.convertAndUpdate(ingredientInPantry, ingredient)
-                const updatedIngredient = {
-                  ...ingredientInPantry,
-                  amount: newTotal
-                }
-                return updatedIngredient
-              } else {
-                const newTotal = Ingredients.convertAndUpdate(ingredientInPantry, ingredient)
-                const updatedIngredient = {
-                  ...ingredientInPantry,
-                  amount: newTotal
-                }
-                return updatedIngredient
+              const newTotal = Ingredients.convertAndUpdate(ingredientInPantry, ingredient)
+              const updatedIngredient = {
+                ...ingredientInPantry,
+                amount: newTotal
               }
+              return updatedIngredient
             }
           }
         } else {
@@ -145,7 +121,6 @@ const RecipeShow = (props) => {
         })
         if(response.ok) {
           fetchPantryIngredients()
-          console.log(updatedIngredients)
           setMade(true)
         }
       } catch(err) {

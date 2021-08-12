@@ -9,16 +9,14 @@ recipesRouter.post("/make", async (req, res) => {
   try {
     for (const ingredient of updatedIngredients) {
       const originalMeasurement = await user.$relatedQuery("pantryMeasurements").where("ingredientId", ingredient.id).first()
-      console.log(originalMeasurement)
       const newMeasurement = await PantryMeasurement.query().updateAndFetchById(originalMeasurement.id, { 
         amount: ingredient.amount,
         unit: ingredient.unit
       })
-      console.log(newMeasurement)
     }
     return res.status(200).json({ message: "ingredients updated" })
   } catch(err) {
-    console.log(err)
+    return res.status(500).json({ err })
   }
 })
 
