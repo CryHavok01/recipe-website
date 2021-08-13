@@ -1,6 +1,8 @@
 import express from "express"
 import RecipeSerializer from "../../../serializers/RecipeSerializer.js"
 import { Ingredient, Recipe } from "../../../models/index.js"
+import IngredientSerializer from "../../../serializers/IngredientSerializer.js"
+import IngredientsMeasurementConverter from "../../../services/IngredientsMeasurementConverter.js"
 
 const usersRecipesRouter = new express.Router({ mergeParams: true })
 
@@ -22,9 +24,19 @@ usersRecipesRouter.get("/:recipeId", async (req, res) => {
   const { recipeId } = req.params
   const user = req.user
   try {
-    const recipes = await user.$relatedQuery("recipes").where("recipeId", recipeId)
-    const serializedRecipe = await RecipeSerializer.getRecipeWithDetails(recipes[0])
-    return res.status(200).json({ recipe: serializedRecipe })
+    const recipe = await user.$relatedQuery("recipes").where("recipeId", recipeId).first()
+    const serializedRecipe = await RecipeSerializer.getRecipeWithDetails(recipe)
+    const pantryIngredients = await user.$relatedQuery("ingredients")
+    const serializedIngredients = pantryIngredients.map(ingredient => {
+      return IngredientSerializer.getIngredientWithDetails(ingredient)
+    })
+    const recipeWithDetails = IngredientsMeasurementConverter.compareIngredients(serializedRecipe, serializedIngredients)
+    const updatedIngredients = IngredientsMeasurementConverter.getUpdatedIngredientTotals(serializedRecipe, serializedIngredients)
+    return res.status(200).json({ 
+      recipe: recipeWithDetails,
+      pantryIngredients: serializedIngredients,
+      updatedIngredients
+     })
   } catch(err) {
     return res.status(500).json({ err })
   }
