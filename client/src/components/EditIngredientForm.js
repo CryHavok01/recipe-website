@@ -103,6 +103,7 @@ const EditIngredientForm = (props) => {
         } else {
           const body = await response.json()
           props.setIngredient(body.editedIngredient)
+          props.setShowEdit(false)
           if(ingredient.id !== body.editedIngredient.id) {
             props.setShouldRedirectToIngredient(true)
           }

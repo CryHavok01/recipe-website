@@ -18,6 +18,19 @@ usersIngredientsRouter.get("/", async (req, res) => {
   }
 })
 
+usersIngredientsRouter.get("/all", async (req, res) => {
+  const user = req.user
+  try {
+    const ingredients = await user.$relatedQuery("ingredients")
+    const serializedIngredients = ingredients.map(ingredient => {
+      return IngredientSerializer.getIngredientWithDetails(ingredient)
+    })
+    return res.status(200).json({ ingredients: serializedIngredients })
+  } catch(err) {
+    return res.status(500).json({ err })
+  }
+})
+
 usersIngredientsRouter.get("/:ingredientId", async (req, res) => {
   const { ingredientId } = req.params
   const user = req.user
