@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
-import Ingredients from "../services/Ingredients"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
@@ -17,91 +16,16 @@ const RecipeShow = (props) => {
       const body = await response.json()
       setRecipe(body.recipe)
       setRecipeIngredients(body.recipe.ingredients)
+      setPantryIngredients(body.pantryIngredients)
+      setUpdatedIngredients(body.updatedIngredients)
     } catch(err) {
       console.error(`Error in Fetch: ${err.message}`)
     }
   }
 
-  const fetchPantryIngredients = async () => {
-    try {
-      const response = await fetch(`/api/v1/users/ingredients/all`)
-      const body = await response.json()
-      setPantryIngredients(body.ingredients)
-    } catch(err) {
-      console.error(`Error in fetch: ${err.message}`)
-    }
-  }
-
   useEffect(() => {
       fetchRecipeDetails()
-      fetchPantryIngredients()
     }, [])
-
-    useEffect(() => {
-      if(recipeIngredients.length > 0) {
-        getNewTotals()
-      }
-    }, [recipeIngredients, pantryIngredients])
-
-    const getNewTotals = () => {
-      let ingredientsToUpdate = recipeIngredients.map(ingredient => {
-        const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
-        if(ingredientInPantry) {
-          if(ingredientInPantry.unit === ingredient.unit) {
-            const updatedIngredient = {
-              ...ingredientInPantry,
-              amount: ingredientInPantry.amount - ingredient.amount
-            }
-            return updatedIngredient
-            } else {
-            const convertedRecipeIngredient = Ingredients.convertIngredient(ingredient)
-            const convertedPantryIngredient = Ingredients.convertIngredient(ingredientInPantry)
-            if (!convertedRecipeIngredient || !convertedPantryIngredient) {
-              return false
-            } else {
-              const newTotal = Ingredients.convertAndUpdate(ingredientInPantry, ingredient)
-              const updatedIngredient = {
-                ...ingredientInPantry,
-                amount: newTotal
-              }
-              return updatedIngredient
-            }
-          }
-        } else {
-          return false
-        }
-      })
-      setUpdatedIngredients(ingredientsToUpdate)
-    }
-    
-    const compareIngredient = (ingredient) => {
-      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
-      if(ingredientInPantry) {
-        if(ingredientInPantry.unit === ingredient.unit) {
-          if(ingredientInPantry.amount >= ingredient.amount) {
-            return "have enough"
-          } else {
-            return "need more"
-          }
-        } else {
-          const convertedRecipeIngredient = Ingredients.convertIngredient(ingredient)
-          const convertedPantryIngredient = Ingredients.convertIngredient(ingredientInPantry)
-          if (!convertedRecipeIngredient || !convertedPantryIngredient) {
-            return "can't tell"
-          } else {
-            if (convertedPantryIngredient - 3 >= convertedRecipeIngredient) {
-              return "have enough"
-            } else if (convertedPantryIngredient + 3 <= convertedRecipeIngredient) {
-              return "need more"
-            } else {
-              return "it's close"
-            }
-          }
-        }
-      } else {
-        return "don't have"
-      }
-    }
 
     const makeRecipe = async (event) => {
       let updatedIngredientData = updatedIngredients.filter(element => element)
@@ -120,7 +44,7 @@ const RecipeShow = (props) => {
           body: JSON.stringify(updatedIngredientData)
         })
         if(response.ok) {
-          fetchPantryIngredients()
+          fetchRecipeDetails()
           setMade(true)
         }
       } catch(err) {
@@ -129,17 +53,16 @@ const RecipeShow = (props) => {
     }
 
     const ingredientsList = recipeIngredients.map(ingredient => {
-      const ingredientInPantry = compareIngredient(ingredient)
       let amountNote
-      if(ingredientInPantry === "don't have") {
+      if(ingredient.detail === "don't have") {
         amountNote = <p className="red">It looks like you don't have this ingredient</p>
-      } else if(ingredientInPantry === "need more") {
+      } else if(ingredient.detail === "need more") {
         amountNote = <p className="red">You don't have enough of this ingredient</p>
-      } else if(ingredientInPantry === "can't tell") {
+      } else if(ingredient.detail === "can't tell") {
         amountNote = <p className="yellow">We can't tell if you have enough of this ingredient</p>
-      } else if(ingredientInPantry === "it's close") {
+      } else if(ingredient.detail === "it's close") {
         amountNote = <p className="yellow">You have just about enough, but you might run out of this ingredient</p>
-    } else if(ingredientInPantry === "have enough") {
+    } else if(ingredient.detail === "have enough") {
       amountNote = <p className="green">You have more than enough of this ingredient</p>
     }
       return (
