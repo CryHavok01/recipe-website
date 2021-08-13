@@ -1,4 +1,4 @@
-class IngredientsConversion {
+class IngredientsMeasurementConverter {
   static teaspoons = ["tsp", "tsps", "teaspoon", "teaspoons"]
   static tablespoons = ["tbs", "tbsp", "tbsps", "tablespoon", "tablespoons"]
   static ounces = ["oz", "ounce", "ounces", "oz."]
@@ -45,31 +45,39 @@ class IngredientsConversion {
       const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
       if(ingredientInPantry) {
         if(ingredientInPantry.unit === ingredient.unit) {
-          if(ingredientInPantry.amount >= ingredient.amount) {
-            ingredient.detail = "have enough"
-          } else {
-            ingredient.detail = "need more"
-          }
+          ingredient.detail = this.compareSameUnits(ingredientInPantry, ingredient)
         } else {
-          const convertedRecipeIngredient = this.convertIngredient(ingredient)
-          const convertedPantryIngredient = this.convertIngredient(ingredientInPantry)
-          if (!convertedRecipeIngredient || !convertedPantryIngredient) {
-            ingredient.detail = "can't tell"
-          } else {
-            if (convertedPantryIngredient - 3 >= convertedRecipeIngredient) {
-              ingredient.detail = "have enough"
-            } else if (convertedPantryIngredient + 3 <= convertedRecipeIngredient) {
-              ingredient.detail = "need more"
-            } else {
-              ingredient.detail = "it's close"
-            }
-          }
+          ingredient.detail = this.compareDifferentUnits(ingredientInPantry, ingredient)
         }
       } else {
         ingredient.detail = "don't have"
       }
     })
     return recipe
+  }
+
+  static compareSameUnits(ingredientInPantry, recipeIngredient) {
+    if(ingredientInPantry.amount >= recipeIngredient.amount) {
+      return "have enough"
+    } else {
+      return "need more"
+    }
+  }
+
+  static compareDifferentUnits(ingredientInPantry, recipeIngredient) {
+    const convertedRecipeIngredient = this.convertIngredient(recipeIngredient)
+    const convertedPantryIngredient = this.convertIngredient(ingredientInPantry)
+    if (!convertedRecipeIngredient || !convertedPantryIngredient) {
+      return "can't tell"
+    } else {
+      if (convertedPantryIngredient - 3 >= convertedRecipeIngredient) {
+        return "have enough"
+      } else if (convertedPantryIngredient + 3 <= convertedRecipeIngredient) {
+        return "need more"
+      } else {
+        return "it's close"
+      }
+    }
   }
 
   static getUpdatedIngredientTotals = (recipe, pantryIngredients) => {
@@ -104,4 +112,4 @@ class IngredientsConversion {
   }
 }
 
-export default IngredientsConversion
+export default IngredientsMeasurementConverter

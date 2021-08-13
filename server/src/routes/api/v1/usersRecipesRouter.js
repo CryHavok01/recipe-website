@@ -2,7 +2,7 @@ import express from "express"
 import RecipeSerializer from "../../../serializers/RecipeSerializer.js"
 import { Ingredient, Recipe } from "../../../models/index.js"
 import IngredientSerializer from "../../../serializers/IngredientSerializer.js"
-import IngredientsConversion from "../../../services/IngredientsConversion.js"
+import IngredientsMeasurementConverter from "../../../services/IngredientsMeasurementConverter.js"
 
 const usersRecipesRouter = new express.Router({ mergeParams: true })
 
@@ -30,8 +30,8 @@ usersRecipesRouter.get("/:recipeId", async (req, res) => {
     const serializedIngredients = pantryIngredients.map(ingredient => {
       return IngredientSerializer.getIngredientWithDetails(ingredient)
     })
-    const recipeWithDetails = IngredientsConversion.compareIngredients(serializedRecipe, serializedIngredients)
-    const updatedIngredients = IngredientsConversion.getUpdatedIngredientTotals(serializedRecipe, serializedIngredients)
+    const recipeWithDetails = IngredientsMeasurementConverter.compareIngredients(serializedRecipe, serializedIngredients)
+    const updatedIngredients = IngredientsMeasurementConverter.getUpdatedIngredientTotals(serializedRecipe, serializedIngredients)
     return res.status(200).json({ 
       recipe: recipeWithDetails,
       pantryIngredients: serializedIngredients,
