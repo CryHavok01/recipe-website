@@ -77,7 +77,7 @@ const RecipeSearch = (props) => {
     if(currentPage > 0) {
       backButton = (
         <button
-          className="button blue"
+          className="button blue round"
           value={currentPage-1}
           onClick={handlePageClick}
         >
@@ -89,7 +89,7 @@ const RecipeSearch = (props) => {
     if(currentPage < totalPages-1) {
       nextButton = (
         <button
-          className="button blue"
+          className="button blue round"
           value={currentPage+1}
           onClick={handlePageClick}
         >
