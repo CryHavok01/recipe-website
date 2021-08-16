@@ -109,27 +109,37 @@ const SearchedRecipeShow = (props) => {
   let saveButton 
   if(saved) {
     saveButton = (
-      <button className="success button">Recipe Saved!</button>
+      <button className="button round">Recipe Saved!</button>
     )
   } else {
     saveButton = (
-      <button className="button" onClick={handleSave}>Save this Recipe</button>
+      <button className="button blue round" onClick={handleSave}>Save this Recipe</button>
     )
   }
 
   return(
-    <div>
-      <h1>{recipe.title}</h1>
-      <img src={recipe.image} alt={`A picture of ${recipe.title}`}/>
-      {saveButton}
-      <h3>Ingredients:</h3>
-      <ul>
-        {ingredientsList}
-      </ul>
-      <h3>Instructions:</h3>
-      <ul>
-        {stepsList}
-      </ul>
+    <div className="grid-container center">
+      <h1 className="title">{recipe.title}</h1>
+      <div className="grid-x margin-x">
+        <div className="cell small-8">
+          <img src={recipe.image} alt={`A picture of ${recipe.title}`}/>
+        </div>
+        <div className="cell small-2 text-middle">
+          {saveButton}
+        </div>
+      </div>
+      <div className="callout left">
+        <h3>Ingredients:</h3>
+        <ul>
+          {ingredientsList}
+        </ul>
+      </div>
+      <div className="callout left">
+        <h3>Instructions:</h3>
+        <ol>
+          {stepsList}
+        </ol>
+      </div>
       <a href={recipe.spoonacularSourceUrl} target="_blank">View the Recipe on Spoonacular</a>
     </div>
   )

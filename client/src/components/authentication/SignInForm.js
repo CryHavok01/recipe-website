@@ -52,6 +52,7 @@ const SignInForm = () => {
       });
     }
   };
+
   const onInputChange = (event) => {
     setUserPayload({
       ...userPayload,
@@ -87,7 +88,7 @@ const SignInForm = () => {
           </label>
         </div>
         <div>
-          <input type="submit" className="button" value="Sign In" />
+          <input type="submit" className="button blue round" value="Sign In" />
         </div>
       </form>
     </div>

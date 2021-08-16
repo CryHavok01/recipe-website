@@ -151,8 +151,8 @@ const EditIngredientForm = (props) => {
 
   return(
     <div>
-      <h2>Edit Details for {ingredient.name}</h2>
-      <form className="callout secondary" onSubmit={handleSubmit}>
+      <h2 className="title">Edit Details for {ingredient.name}</h2>
+      <form className="callout" onSubmit={handleSubmit}>
         <label htmlFor="name">Name: </label>
         <input 
           type="text" 
@@ -201,7 +201,7 @@ const EditIngredientForm = (props) => {
         <input 
           type="submit" 
           value="Submit"
-          className="button"
+          className="button blue round"
         />
       </form>
     </div>

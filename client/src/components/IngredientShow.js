@@ -91,13 +91,19 @@ const IngredientShow = (props) => {
   }
 
   return(
-    <div>
-      <h2>{ingredient.name}</h2>
-      {measurement}
-      <p>{ingredient.description}</p>
-      <div>
-        <button className="button margin-5" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
-        <button className="button margin-5" onClick={handleDelete}>Delete Ingredient</button>
+    <div className="grid-container">
+      <div className="callout">
+        <h2 className="title">{ingredient.name}</h2>
+        {measurement}
+        <p>{ingredient.description}</p>
+      </div>
+      <div className="grid-x">
+        <div className="cell small-2">
+          <button className="button blue round" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
+        </div>
+        <div className="cell small-2">
+          <button className="button blue round" onClick={handleDelete}>Delete Ingredient</button>
+        </div>
       </div>
       {editForm}
     </div>

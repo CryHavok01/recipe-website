@@ -66,11 +66,11 @@ const RecipeShow = (props) => {
       amountNote = <p className="green">You have more than enough of this ingredient</p>
     }
       return (
-        <div key={ingredient.id}>
+        <li key={ingredient.id}>
           <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
           <p>{ingredient.description}</p>
           {amountNote}
-        </div>
+        </li>
       )
     })
 
@@ -79,7 +79,7 @@ const RecipeShow = (props) => {
     stepsList = recipe.steps.map(step => {
       return(
         <div key={step.id}>
-          <p>{step.number}: {step.step}</p>
+          <li>{step.step}</li>
         </div>
       )
     })
@@ -91,15 +91,25 @@ const RecipeShow = (props) => {
   }
 
   return(
-    <div>
-      <h1>{recipe.name}</h1>
+    <div className="grid-container center">
+      <h1 className="title">{recipe.name}</h1>
       <h2>{recipe.description}</h2>
-      {madeNotice}
-      <h3>Ingredients: </h3>
-      {ingredientsList}
-      <h3>Instructions: </h3>
-      {stepsList}
-      <button className="button blue round" onClick={makeRecipe}>Make this Recipe</button>
+      <div className="grid-x grid-margin-x left">
+        <div className="cell medium-6 callout">
+          {madeNotice}
+          <h3>Ingredients: </h3>
+          <ul>
+            {ingredientsList}
+          </ul>
+        </div>
+        <div className="cell medium-6 callout">
+          <h3>Instructions: </h3>
+          <ol>
+            {stepsList}
+          </ol>
+          <button className="button blue round" onClick={makeRecipe}>Make this Recipe</button>
+        </div>
+      </div>
     </div>
   )
 }
