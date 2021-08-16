@@ -32,13 +32,6 @@ if (recipes.length > 0) {
 
   return (
     <div className="grid-container center">
-<<<<<<< HEAD
-      <h1 className="title">Your Home Page</h1>
-      <div className="callout">
-        <div className="grid-x margin-x">
-          <div className="cell small-4 left">
-            <p>You currently have {ingredientsNum} ingredients in your kitchen</p>
-=======
       <h1 className="title">Your Profile</h1>
         <div className="grid-x grid-margin-x">
           <div className="cell medium-6 callout pantry">
@@ -50,7 +43,6 @@ if (recipes.length > 0) {
                 <button className="button round blue bold">Ingredients</button>
               </Link>
             </div>
->>>>>>> main
           </div>
           <div className="cell medium-6 callout cookbook">
             <div className="cookbook-text">
