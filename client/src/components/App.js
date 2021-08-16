@@ -38,7 +38,7 @@ const App = (props) => {
 
   const homeButton = (
     <Link to="/home">
-      <button className="button orange bold round" id="white-text">View your Kitchen</button>
+      <button className="button orange bold round" id="white-text">View your Profile</button>
     </Link>
   )
 
