@@ -33,7 +33,7 @@ if (recipes.length > 0) {
   return (
     <div className="grid-container center">
       <h1 className="title">Your Home Page</h1>
-      <div class="callout">
+      <div className="callout">
         <div className="grid-x margin-x">
           <div className="cell small-4 left">
             <p>You currently have {ingredientsNum} ingredients in your kitchen</p>
