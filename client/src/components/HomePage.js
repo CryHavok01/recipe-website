@@ -32,7 +32,7 @@ if (recipes.length > 0) {
 
   return (
     <div className="grid-container center">
-      <h1 className="title">Your Home Page</h1>
+      <h1 className="title">Your Kitchen</h1>
       <div className="callout">
         <div className="grid-x margin-x">
           <div className="cell small-4 left">
@@ -58,7 +58,7 @@ if (recipes.length > 0) {
         </div>
         <br />
         <Link to="/search">
-          <button className="button blue round">Search for New Recipes</button>
+          <button className="button orange round bold" id="white-text">Search for New Recipes</button>
         </Link>
       </div>
     </div>
