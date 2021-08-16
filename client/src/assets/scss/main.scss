@@ -110,3 +110,61 @@ body {
 .green {
   color: green
 }
+
+.bold {
+  font-size: 125%;
+}
+
+#white-text {
+  color: white;
+}
+
+.pantry {
+  position: relative;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-image: url(https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/pantry-organization-hbx110120wholehome-015-1613512868.jpg);
+    background-size: 100%;
+    background-position: center;
+    opacity: 0.5;
+  }
+}
+
+.pantry-text{
+  position: relative;
+}
+
+.cookbook {
+  position: relative;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-image: url(https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/skillet-suppers-1612369294.jpg);
+    background-size: 132%;
+    background-position: center;
+    opacity: 0.5;
+  }
+}
+
+.cookbook-text{
+  position: relative;
+}

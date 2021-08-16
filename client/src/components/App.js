@@ -16,6 +16,7 @@ import RecipeList from "./RecipeList";
 import RecipeShow from "./RecipeShow";
 import RecipeSearch from "./RecipeSearch";
 import SearchedRecipeShow from "./SearchedRecipeShow";
+import { Link } from "react-router-dom";
 
 const App = (props) => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -28,6 +29,19 @@ const App = (props) => {
         setCurrentUser(null);
       });
   }, []);
+
+  const signUpButton = (
+    <Link to="/users/new">
+      <button className="button orange bold round" id="white-text">Sign Up Now!</button>
+    </Link>
+  )
+
+  const homeButton = (
+    <Link to="/home">
+      <button className="button orange bold round" id="white-text">View your Profile</button>
+    </Link>
+  )
+
   return (
     <Router>
       <TopBar user={currentUser} />
@@ -35,8 +49,11 @@ const App = (props) => {
         <Route exact path="/">
           <div className="grid-container front-page center">
             <div className="welcome-text callout">
-            <h1 className="title">Welcome to Josh's Kitchen</h1>
-            <p>This is a website designed to help you keep track of your favorite recipes, as well as all the various ingredients you have in your own kitchen.  Get started by adding information about the ingredients you own, and then you can search for recipes that look tasty or add your own.  Once you select a recipe, we'll let you know if you have enough ingredients to make it, or let you know which things you should go shopping for.  If you're ready to get cooking, you can press the big green button and we'll automatically update your ingredients by subtracting the amounts you use in that recipe.  Sign up for a new account, or sign in to an existing one to get cooking!</p>
+              <h1 className="title">Welcome to Josh's Kitchen</h1>
+              <p>This is a website designed to help you keep track of your favorite recipes, as well as all the various ingredients you have in your own kitchen.  Get started by adding information about the ingredients you own, and then you can search for recipes that look tasty.  Once you select a recipe, we'll let you know if you have enough ingredients to make it, or let you know which things you should go shopping for.  If you're ready to get cooking, you can press the Make this Recipe button and we'll automatically update your ingredients by subtracting the amounts you use in that recipe.  Sign up for a new account, or sign in to an existing one to get cooking!</p>
+              <div className="center">
+                {currentUser ? homeButton : signUpButton}
+              </div>
             </div>
           </div>
         </Route>
