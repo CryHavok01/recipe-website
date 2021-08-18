@@ -50,7 +50,18 @@ class IngredientsMeasurementConverter {
           ingredient.detail = this.compareDifferentUnits(ingredientInPantry, ingredient)
         }
       } else {
-        ingredient.detail = "don't have"
+        const potentialMatches = []
+        pantryIngredients.forEach(pantryIngredient => {
+          if(ingredient.name.includes(pantryIngredient.name.toLowerCase()) || pantryIngredient.name.toLowerCase().includes(ingredient.name)) {
+            potentialMatches.push(Number(pantryIngredient.id))
+          }
+        })
+        if (potentialMatches.length > 0) {
+          ingredient.potentialMatches = potentialMatches
+          ingredient.detail = "possible match"
+        } else {
+          ingredient.detail = "don't have"
+        }
       }
     })
     return recipe

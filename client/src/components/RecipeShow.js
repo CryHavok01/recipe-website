@@ -55,22 +55,28 @@ const RecipeShow = (props) => {
     const ingredientsList = recipeIngredients.map(ingredient => {
       let amountNote
       if(ingredient.detail === "don't have") {
-        amountNote = <p className="red">It looks like you don't have this ingredient</p>
+        amountNote = <p className="red">X</p>
       } else if(ingredient.detail === "need more") {
-        amountNote = <p className="red">You don't have enough of this ingredient</p>
+        amountNote = <p className="red">X</p>
       } else if(ingredient.detail === "can't tell") {
-        amountNote = <p className="yellow">We can't tell if you have enough of this ingredient</p>
+        amountNote = <p className="yellow">?</p>
+      } else if(ingredient.detail === "possible match") {
+        amountNote = <p className="yellow">?</p>
       } else if(ingredient.detail === "it's close") {
-        amountNote = <p className="yellow">You have just about enough, but you might run out of this ingredient</p>
+        amountNote = <p className="yellow">?</p>
     } else if(ingredient.detail === "have enough") {
-      amountNote = <p className="green">You have more than enough of this ingredient</p>
+      amountNote = <p className="green">:D</p>
     }
       return (
-        <li key={ingredient.id}>
-          <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
-          <p>{ingredient.description}</p>
-          {amountNote}
-        </li>
+        <div className="grid-x list-border" key={ingredient.id}>
+          <div className="cell small-11">
+            <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
+            <p>{ingredient.description}</p>
+          </div>
+          <div className="cell small-1">
+              {amountNote}
+          </div>
+        </div>
       )
     })
 
@@ -100,13 +106,12 @@ const RecipeShow = (props) => {
       <h1 className="title">{recipe.name}</h1>
       <h2>{recipe.description}</h2>
       {recipeImage}
-      <div className="grid-x grid-margin-x left">
+      <div className="grid-x grid-margin-x left" id="top-space">
         <div className="cell medium-6 callout">
-          {madeNotice}
           <h3>Ingredients: </h3>
-          <ul>
+          <div>
             {ingredientsList}
-          </ul>
+          </div>
         </div>
         <div className="cell medium-6 callout">
           <h3>Instructions: </h3>
@@ -114,6 +119,7 @@ const RecipeShow = (props) => {
             {stepsList}
           </ol>
           <button className="button blue round" onClick={makeRecipe}>Make this Recipe</button>
+          {madeNotice}
         </div>
       </div>
     </div>
