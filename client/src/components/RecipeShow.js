@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
+import RecipeIngredientTile from "./RecipeIngredientTile"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
@@ -51,32 +52,13 @@ const RecipeShow = (props) => {
         console.error(`Error in Fetch: ${err.message}`)
       }
     }
-
+    
     const ingredientsList = recipeIngredients.map(ingredient => {
-      let amountNote
-      if(ingredient.detail === "don't have") {
-        amountNote = <p className="red">X</p>
-      } else if(ingredient.detail === "need more") {
-        amountNote = <p className="red">X</p>
-      } else if(ingredient.detail === "can't tell") {
-        amountNote = <p className="yellow">?</p>
-      } else if(ingredient.detail === "possible match") {
-        amountNote = <p className="yellow">?</p>
-      } else if(ingredient.detail === "it's close") {
-        amountNote = <p className="yellow">?</p>
-    } else if(ingredient.detail === "have enough") {
-      amountNote = <p className="green">:D</p>
-    }
       return (
-        <div className="grid-x list-border" key={ingredient.id}>
-          <div className="cell small-11">
-            <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
-            <p>{ingredient.description}</p>
-          </div>
-          <div className="cell small-1">
-              {amountNote}
-          </div>
-        </div>
+        <RecipeIngredientTile 
+          key={ingredient.id}
+          ingredient={ingredient}
+        />
       )
     })
 

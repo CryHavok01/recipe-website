@@ -110,15 +110,18 @@ body {
 }
 
 .red {
-  color: red
+  color: red;
+  cursor: pointer;
 }
 
 .yellow {
-  color: orange
+  color: orange;
+  cursor: pointer;
 }
 
 .green {
-  color: green
+  color: green;
+  cursor: pointer;
 }
 
 .bold {
@@ -177,4 +180,31 @@ body {
 
 .cookbook-text{
   position: relative;
+}
+
+.ingredient-note-red {
+  padding-left: 4px;
+  background-color: white;
+  width: 200px;
+  border:red solid 2px;
+  position: absolute;
+  z-index: 1;
+}
+
+.ingredient-note-yellow {
+  padding-left: 4px;
+  background-color: white;
+  width: 200px;
+  border:orange solid 2px;
+  position: absolute;
+  z-index: 1;
+}
+
+.ingredient-note-green {
+  padding-left: 4px;
+  background-color: white;
+  width: 200px;
+  border:green solid 2px;
+  position: absolute;
+  z-index: 1;
 }
