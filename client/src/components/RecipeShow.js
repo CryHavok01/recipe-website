@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
 import RecipeIngredientTile from "./RecipeIngredientTile"
+import IngredientMeasurementConverter from "../services/IngredientMeasurementConverter"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
@@ -52,12 +53,45 @@ const RecipeShow = (props) => {
         console.error(`Error in Fetch: ${err.message}`)
       }
     }
+
+    const newIngredientMatch = (pantryIngredientId, recipeIngredient) => {
+      const matchIngredient = pantryIngredients.find(ingredient => ingredient.id === pantryIngredientId)
+      const newIngredientInfo = {
+        ...recipeIngredient,
+        detail: IngredientMeasurementConverter.compareIngredient(matchIngredient, recipeIngredient)
+      }
+      delete newIngredientInfo.potentialMatches
+      const recipeIngredientsCopy = [...recipeIngredients]
+      const oldIngredientIndex = recipeIngredientsCopy.findIndex(ingredient => ingredient.id === newIngredientInfo.id)
+      recipeIngredientsCopy.splice(oldIngredientIndex, 1, newIngredientInfo)
+      setRecipeIngredients(recipeIngredientsCopy)
+
+      const newUpdatedIngredient = IngredientMeasurementConverter.getUpdatedIngredientTotal(matchIngredient, recipeIngredient)
+      const updatedIngredientsCopy = [...updatedIngredients]
+      updatedIngredientsCopy.splice(updatedIngredients.indexOf(false), 1, newUpdatedIngredient)
+      setUpdatedIngredients(updatedIngredientsCopy)
+    }
+
+    const noIngredientMatch = (recipeIngredient) => {
+      const newIngredientInfo = {
+        ...recipeIngredient,
+        detail: "don't have"
+      }
+      delete newIngredientInfo.potentialMatches
+      const recipeIngredientsCopy = [...recipeIngredients]
+      const oldIngredientIndex = recipeIngredientsCopy.findIndex(ingredient => ingredient.id === newIngredientInfo.id)
+      recipeIngredientsCopy.splice(oldIngredientIndex, 1, newIngredientInfo)
+      setRecipeIngredients(recipeIngredientsCopy)
+    }
     
     const ingredientsList = recipeIngredients.map(ingredient => {
       return (
         <RecipeIngredientTile 
           key={ingredient.id}
           ingredient={ingredient}
+          newIngredientMatch={newIngredientMatch}
+          noIngredientMatch={noIngredientMatch}
+          pantryIngredients={pantryIngredients}
         />
       )
     })
@@ -100,7 +134,9 @@ const RecipeShow = (props) => {
           <ol>
             {stepsList}
           </ol>
-          <button className="button blue round" onClick={makeRecipe}>Make this Recipe</button>
+          <div className="center">
+            <button className="button blue round" onClick={makeRecipe}>Make this Recipe</button>
+          </div>
           {madeNotice}
         </div>
       </div>

@@ -22,6 +22,39 @@ const RecipeIngredientTile = (props) => {
     amountNote = <button className="green" onClick={onDetailsClick}>&#x2713;</button>
   }
 
+  const handleNewIngredientClick = (event) => {
+    props.newIngredientMatch(event.currentTarget.value, props.ingredient)
+    setShowDetails(false)
+  }
+
+  const handleNoClick = (event) => {
+    props.noIngredientMatch(props.ingredient)
+    setShowDetails(false)
+  }
+
+  let matchOptions
+  if(props.ingredient.potentialMatches) {
+    if(props.pantryIngredients.length > 0) {
+      matchOptions = props.ingredient.potentialMatches.map(match => {
+        const matchIngredient = props.pantryIngredients.find(pantryIngredient => pantryIngredient.id == match)
+        return (
+          <div key={matchIngredient.id} className="grid-x">
+            <div className="cell small-8">
+              <p>{matchIngredient.name}</p>
+            </div>
+            <div className="cell small-4">
+              <button
+                className="button blue round"
+                onClick={handleNewIngredientClick}
+                value={matchIngredient.id}
+              >Yes</button>
+            </div>
+          </div>
+        )
+      })
+    }
+  }
+
   let ingredientDetails
   if(showDetails) {
     if(props.ingredient.detail === "don't have") {
@@ -45,7 +78,11 @@ const RecipeIngredientTile = (props) => {
     } else if(props.ingredient.detail === "possible match") {
       ingredientDetails = (
         <div className="ingredient-note-yellow">
-          <p>Is {props.ingredient.name} the same as this?</p>
+          <p>Is {props.ingredient.name} the same as:</p>
+          {matchOptions}
+          <div className="center">
+            <button className="button round blue" onClick={handleNoClick}>No</button>
+          </div>
         </div>
       )
     } else if(props.ingredient.detail === "it's close") {

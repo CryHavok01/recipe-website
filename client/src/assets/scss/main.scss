@@ -185,8 +185,9 @@ body {
 .ingredient-note-red {
   padding-left: 4px;
   background-color: white;
-  width: 200px;
+  width: 250px;
   border:red solid 2px;
+  border-radius: 10px;
   position: absolute;
   z-index: 1;
 }
@@ -194,8 +195,9 @@ body {
 .ingredient-note-yellow {
   padding-left: 4px;
   background-color: white;
-  width: 200px;
+  width: 250px;
   border:orange solid 2px;
+  border-radius: 10px;
   position: absolute;
   z-index: 1;
 }
@@ -203,8 +205,9 @@ body {
 .ingredient-note-green {
   padding-left: 4px;
   background-color: white;
-  width: 200px;
+  width: 250px;
   border:green solid 2px;
+  border-radius: 10px;
   position: absolute;
   z-index: 1;
 }
