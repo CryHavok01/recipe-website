@@ -52,7 +52,8 @@ const SearchedRecipeShow = (props) => {
   const handleSave = async (event) => {
     const recipeData = { 
       name: recipe.title,
-      spoonacularId: recipe.id
+      spoonacularId: recipe.id,
+      image: recipe.image
     }
     const ingredientsData = ingredients.map(ingredient => {
       return {

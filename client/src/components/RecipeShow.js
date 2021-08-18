@@ -84,6 +84,11 @@ const RecipeShow = (props) => {
       )
     })
   }
+  
+  let recipeImage
+  if(recipe.image) {
+    recipeImage = <img src={recipe.image} alt={`An image of ${recipe.name}`}/>
+  }
 
   let madeNotice
   if(made) {
@@ -94,6 +99,7 @@ const RecipeShow = (props) => {
     <div className="grid-container center">
       <h1 className="title">{recipe.name}</h1>
       <h2>{recipe.description}</h2>
+      {recipeImage}
       <div className="grid-x grid-margin-x left">
         <div className="cell medium-6 callout">
           {madeNotice}
