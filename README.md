@@ -2,7 +2,7 @@
 Launch Academy Breakable Toy Project
 
 This is a kitchen assistant website to help users keep track of their favorite recipes and the ingredients that they own.  This website uses the Spoonacular API to provide a database of recipes for users to search.  
-You can view the full website [here](https://joshs-kitchen.herokuapp.com/)
+You can view the full website [here](https://joshs-kitchen.herokuapp.com/). 
 If you'd like use a pre-made account that already has sample data, you can log in using **test@test.com** and password: **test** 
 
 # Installation
