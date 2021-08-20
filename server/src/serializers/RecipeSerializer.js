@@ -13,7 +13,7 @@ class RecipeSerializer {
   }
 
   static async getRecipeWithDetails(recipe) {
-    const allowedAttributes = ["name", "description", "id"]
+    const allowedAttributes = ["name", "description", "id", "image"]
 
     let serializedRecipe = {}
     allowedAttributes.forEach(attribute => {

@@ -12,7 +12,8 @@ class Recipe extends Model {
       properties: {
         name: { type: "string" },
         description: { type: "string" },
-        spoonacularId: { type: "integer" }
+        spoonacularId: { type: "integer" },
+        image: { type: "string" }
       }
     }
   }

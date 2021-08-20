@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
+import RecipeIngredientTile from "./RecipeIngredientTile"
+import IngredientMeasurementConverter from "../services/IngredientMeasurementConverter"
+import { Link } from "react-router-dom"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
@@ -52,25 +55,45 @@ const RecipeShow = (props) => {
       }
     }
 
-    const ingredientsList = recipeIngredients.map(ingredient => {
-      let amountNote
-      if(ingredient.detail === "don't have") {
-        amountNote = <p className="red">It looks like you don't have this ingredient</p>
-      } else if(ingredient.detail === "need more") {
-        amountNote = <p className="red">You don't have enough of this ingredient</p>
-      } else if(ingredient.detail === "can't tell") {
-        amountNote = <p className="yellow">We can't tell if you have enough of this ingredient</p>
-      } else if(ingredient.detail === "it's close") {
-        amountNote = <p className="yellow">You have just about enough, but you might run out of this ingredient</p>
-    } else if(ingredient.detail === "have enough") {
-      amountNote = <p className="green">You have more than enough of this ingredient</p>
+    const newIngredientMatch = (pantryIngredientId, recipeIngredient) => {
+      const matchIngredient = pantryIngredients.find(ingredient => ingredient.id === pantryIngredientId)
+      const newIngredientInfo = {
+        ...recipeIngredient,
+        detail: IngredientMeasurementConverter.compareIngredient(matchIngredient, recipeIngredient)
+      }
+      delete newIngredientInfo.potentialMatches
+      const recipeIngredientsCopy = [...recipeIngredients]
+      const oldIngredientIndex = recipeIngredientsCopy.findIndex(ingredient => ingredient.id === newIngredientInfo.id)
+      recipeIngredientsCopy.splice(oldIngredientIndex, 1, newIngredientInfo)
+      setRecipeIngredients(recipeIngredientsCopy)
+
+      const newUpdatedIngredient = IngredientMeasurementConverter.getUpdatedIngredientTotal(matchIngredient, recipeIngredient)
+      const updatedIngredientsCopy = [...updatedIngredients]
+      updatedIngredientsCopy.splice(updatedIngredients.indexOf(false), 1, newUpdatedIngredient)
+      setUpdatedIngredients(updatedIngredientsCopy)
     }
+
+    const noIngredientMatch = (recipeIngredient) => {
+      const newIngredientInfo = {
+        ...recipeIngredient,
+        detail: "don't have"
+      }
+      delete newIngredientInfo.potentialMatches
+      const recipeIngredientsCopy = [...recipeIngredients]
+      const oldIngredientIndex = recipeIngredientsCopy.findIndex(ingredient => ingredient.id === newIngredientInfo.id)
+      recipeIngredientsCopy.splice(oldIngredientIndex, 1, newIngredientInfo)
+      setRecipeIngredients(recipeIngredientsCopy)
+    }
+    
+    const ingredientsList = recipeIngredients.map(ingredient => {
       return (
-        <li key={ingredient.id}>
-          <p>{ingredient.name}: {Number(ingredient.amount)} {ingredient.unit}</p>
-          <p>{ingredient.description}</p>
-          {amountNote}
-        </li>
+        <RecipeIngredientTile 
+          key={ingredient.id}
+          ingredient={ingredient}
+          newIngredientMatch={newIngredientMatch}
+          noIngredientMatch={noIngredientMatch}
+          pantryIngredients={pantryIngredients}
+        />
       )
     })
 
@@ -84,30 +107,44 @@ const RecipeShow = (props) => {
       )
     })
   }
-
-  let madeNotice
-  if(made) {
-    madeNotice = <p>We've updated your ingredients for you.  Enjoy your food!</p>
+  
+  let recipeImage
+  if(recipe.image) {
+    recipeImage = <img src={recipe.image} alt={`An image of ${recipe.name}`}/>
   }
+
+  const madeNotice = (
+      <div id="made-recipe">
+        <p>We've updated your ingredients for you.  Enjoy your food!</p>
+        <Link to="/ingredients">
+          <button className="button round blue bold">View your Ingredients</button>
+        </Link>
+      </div>
+    )
+  const makeButton = (
+    <div className="center">
+      <button className="button blue round bold" onClick={makeRecipe}>Make this Recipe</button>
+    </div>
+  )
 
   return(
     <div className="grid-container center">
       <h1 className="title">{recipe.name}</h1>
       <h2>{recipe.description}</h2>
-      <div className="grid-x grid-margin-x left">
+      {recipeImage}
+      <div className="grid-x grid-margin-x left" id="top-space">
         <div className="cell medium-6 callout">
-          {madeNotice}
           <h3>Ingredients: </h3>
-          <ul>
+          <div>
             {ingredientsList}
-          </ul>
+          </div>
         </div>
         <div className="cell medium-6 callout">
           <h3>Instructions: </h3>
           <ol>
             {stepsList}
           </ol>
-          <button className="button blue round" onClick={makeRecipe}>Make this Recipe</button>
+          {made ? madeNotice : makeButton}
         </div>
       </div>
     </div>

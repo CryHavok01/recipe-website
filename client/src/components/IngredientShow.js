@@ -92,7 +92,7 @@ const IngredientShow = (props) => {
 
   return(
     <div className="grid-container">
-      <div className="callout">
+      <div className="callout" id="top-space">
         <h2 className="title">{ingredient.name}</h2>
         {measurement}
         <p>{ingredient.description}</p>

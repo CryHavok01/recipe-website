@@ -25,12 +25,12 @@ const IngredientsList = (props) => {
   })
 
   return (
-    <div className="grid-container fluid">
+    <div className="grid-container">
       <div className="grid-x align-center">
-        <div className="cell small-9">
+        <div className="cell medium-9">
           <h1 className="title">What's in Your Pantry?</h1>
         </div>
-        <div className="cell small-2">
+        <div className="cell medium-2">
           <Link to="/ingredients/new" className="button blue round middle">
             Add New Ingredient
           </Link>
