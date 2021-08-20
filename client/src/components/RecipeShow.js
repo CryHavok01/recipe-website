@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
 import RecipeIngredientTile from "./RecipeIngredientTile"
 import IngredientMeasurementConverter from "../services/IngredientMeasurementConverter"
+import { Link } from "react-router-dom"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
@@ -112,10 +113,19 @@ const RecipeShow = (props) => {
     recipeImage = <img src={recipe.image} alt={`An image of ${recipe.name}`}/>
   }
 
-  let madeNotice
-  if(made) {
-    madeNotice = <p>We've updated your ingredients for you.  Enjoy your food!</p>
-  }
+  const madeNotice = (
+      <div id="made-recipe">
+        <p>We've updated your ingredients for you.  Enjoy your food!</p>
+        <Link to="/ingredients">
+          <button className="button round blue bold">View your Ingredients</button>
+        </Link>
+      </div>
+    )
+  const makeButton = (
+    <div className="center">
+      <button className="button blue round bold" onClick={makeRecipe}>Make this Recipe</button>
+    </div>
+  )
 
   return(
     <div className="grid-container center">
@@ -134,10 +144,7 @@ const RecipeShow = (props) => {
           <ol>
             {stepsList}
           </ol>
-          <div className="center">
-            <button className="button blue round" onClick={makeRecipe}>Make this Recipe</button>
-          </div>
-          {madeNotice}
+          {made ? madeNotice : makeButton}
         </div>
       </div>
     </div>
