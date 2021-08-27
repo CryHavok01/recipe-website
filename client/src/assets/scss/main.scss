@@ -70,6 +70,7 @@ body {
 
 .title {
   font-weight: bold;
+  color: black
 }
 
 .border {
@@ -221,4 +222,12 @@ body {
   border-radius: 10px;
   padding-top: 5px;
   text-align: center;
+}
+
+.shadow {
+  box-shadow: 5px 5px 10px #002684;
+}
+
+.hover-link:hover {
+  background-color: lightblue;
 }

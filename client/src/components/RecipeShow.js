@@ -3,6 +3,7 @@ import { useParams } from "react-router"
 import RecipeIngredientTile from "./RecipeIngredientTile"
 import IngredientMeasurementConverter from "../services/IngredientMeasurementConverter"
 import { Link } from "react-router-dom"
+import _ from "lodash"
 
 const RecipeShow = (props) => {
   const [recipe, setRecipe] = useState({})
@@ -127,9 +128,11 @@ const RecipeShow = (props) => {
     </div>
   )
 
+  const name = _.startCase(recipe.name)
+
   return(
     <div className="grid-container center">
-      <h1 className="title">{recipe.name}</h1>
+      <h1 className="title">{name}</h1>
       <h2>{recipe.description}</h2>
       {recipeImage}
       <div className="grid-x grid-margin-x left" id="top-space">
