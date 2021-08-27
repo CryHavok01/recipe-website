@@ -31,8 +31,8 @@ const IngredientsList = (props) => {
           <h1 className="title">What's in Your Pantry?</h1>
         </div>
         <div className="cell medium-2">
-          <Link to="/ingredients/new" className="button blue round middle">
-            Add New Ingredient
+          <Link to="/ingredients/new" className="button blue round bold" id="top-space">
+            New Ingredient
           </Link>
         </div>
       </div>

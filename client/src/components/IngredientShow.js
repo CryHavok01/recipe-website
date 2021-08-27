@@ -99,10 +99,10 @@ const IngredientShow = (props) => {
       </div>
       <div className="grid-x">
         <div className="cell small-2">
-          <button className="button blue round" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
+          <button className="button blue round bold" onClick={editClick}>{showEdit ? "Hide Edit Form" : "Edit Ingredient"}</button>
         </div>
         <div className="cell small-2">
-          <button className="button blue round" onClick={handleDelete}>Delete Ingredient</button>
+          <button className="button bold round blue " onClick={handleDelete}>Delete Ingredient</button>
         </div>
       </div>
       {editForm}
