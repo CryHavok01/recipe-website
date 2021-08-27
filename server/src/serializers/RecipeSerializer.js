@@ -1,13 +1,13 @@
 class RecipeSerializer {
   static getRecipeInfo(recipe) {
-    const allowedAttributes = ["name", "description", "id"]
+    const allowedAttributes = ["name", "id", "image"]
 
     let serializedRecipe = {}
     allowedAttributes.forEach(attribute => {
       serializedRecipe[attribute] = recipe[attribute]
     })
 
-    serializedRecipe.name = serializedRecipe.name.charAt(0).toUpperCase() + serializedRecipe.name.slice(1)
+    serializedRecipe.name = this.capitalize(serializedRecipe.name)
 
     return serializedRecipe
   }
