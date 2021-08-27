@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import _ from "lodash"
+import defaultPic from "../../public/default_recipe_image.jpeg"
 
 const RecipeTile = (props) => {
 
@@ -12,7 +13,7 @@ const RecipeTile = (props) => {
   } else {
     image = <img 
       className="shadow" 
-      src="http://thehalalworld.com/uploads/pages/Korean-Rice-Cake-and-Dumpling-Soup-Duk-Guk-and-Mandu.jpg" 
+      src={defaultPic}
       alt="A placeholder picture of a blurred out meal"
     />
   }
