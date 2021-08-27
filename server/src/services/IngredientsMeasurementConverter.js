@@ -42,7 +42,7 @@ class IngredientsMeasurementConverter {
 
   static compareIngredients(recipe, pantryIngredients) {
     recipe.ingredients.forEach(ingredient => {
-      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
+      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name.toLowerCase())
       if(ingredientInPantry) {
         if(ingredientInPantry.unit === ingredient.unit) {
           ingredient.detail = this.compareSameUnits(ingredientInPantry, ingredient)
@@ -52,7 +52,7 @@ class IngredientsMeasurementConverter {
       } else {
         const potentialMatches = []
         pantryIngredients.forEach(pantryIngredient => {
-          if(ingredient.name.includes(pantryIngredient.name.toLowerCase()) || pantryIngredient.name.toLowerCase().includes(ingredient.name)) {
+          if(ingredient.name.toLowerCase().includes(pantryIngredient.name.toLowerCase()) || pantryIngredient.name.toLowerCase().includes(ingredient.name.toLowerCase())) {
             potentialMatches.push(Number(pantryIngredient.id))
           }
         })
@@ -93,7 +93,7 @@ class IngredientsMeasurementConverter {
 
   static getUpdatedIngredientTotals = (recipe, pantryIngredients) => {
     let updatedIngredients = recipe.ingredients.map(ingredient => {
-      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
+      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name.toLowerCase())
       if(ingredientInPantry) {
         if(ingredientInPantry.unit === ingredient.unit) {
           const updatedIngredient = {

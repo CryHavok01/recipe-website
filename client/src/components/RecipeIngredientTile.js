@@ -100,11 +100,13 @@ const RecipeIngredientTile = (props) => {
     }
   }
 
+  const description = <p>{props.ingredient.description}</p>
+
   return (
-    <div className="grid-x list-border" key={props.ingredient.id}>
+    <div className="grid-x list-border small-round" key={props.ingredient.id}>
       <div className="cell small-11">
-        <p>{props.ingredient.name}: {Number(props.ingredient.amount)} {props.ingredient.unit}</p>
-        <p>{props.ingredient.description}</p>
+        <p>{props.ingredient.name} - {Number(props.ingredient.amount)} {props.ingredient.unit}</p>
+        {props.ingredient.description ? description : null}
       </div>
       <div className="cell small-1">
           {amountNote}
