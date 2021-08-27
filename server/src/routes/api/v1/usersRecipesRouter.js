@@ -32,11 +32,11 @@ usersRecipesRouter.get("/:recipeId", async (req, res) => {
     })
     const recipeWithDetails = IngredientsMeasurementConverter.compareIngredients(serializedRecipe, serializedIngredients)
     const updatedIngredients = IngredientsMeasurementConverter.getUpdatedIngredientTotals(serializedRecipe, serializedIngredients)
-    return res.status(200).json({ 
+    return res.status(200).json({
       recipe: recipeWithDetails,
       pantryIngredients: serializedIngredients,
       updatedIngredients
-     })
+    })
   } catch(err) {
     return res.status(500).json({ err })
   }

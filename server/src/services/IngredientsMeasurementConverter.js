@@ -7,15 +7,15 @@ class IngredientsMeasurementConverter {
 
   static convertIngredient(ingredient) {
     let converted
-    if (this.gallons.includes(ingredient.unit)) {
+    if (this.gallons.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount * 768
-    } else if(this.cups.includes(ingredient.unit)) {
+    } else if(this.cups.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount * 48
-    } else if (this.ounces.includes(ingredient.unit)) {
+    } else if (this.ounces.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount * 6
-    } else if (this.tablespoons.includes(ingredient.unit)) {
+    } else if (this.tablespoons.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount * 3
-    } else if (this.teaspoons.includes(ingredient.unit)) {
+    } else if (this.teaspoons.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount
     }
     return converted
@@ -26,15 +26,15 @@ class IngredientsMeasurementConverter {
     const convertedUsed = this.convertIngredient(ingredientUsed)
     const newConvertedTotal = convertedTotal - convertedUsed
     let updatedTotal
-    if (this.gallons.includes(ingredientTotal.unit)) {
+    if (this.gallons.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal / 768
-    } else if(this.cups.includes(ingredientTotal.unit)) {
+    } else if(this.cups.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal / 48
-    } else if (this.ounces.includes(ingredientTotal.unit)) {
+    } else if (this.ounces.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal / 6
-    } else if (this.tablespoons.includes(ingredientTotal.unit)) {
+    } else if (this.tablespoons.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal / 3
-    } else if (this.teaspoons.includes(ingredientTotal.unit)) {
+    } else if (this.teaspoons.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal
     }
     return updatedTotal
@@ -42,9 +42,9 @@ class IngredientsMeasurementConverter {
 
   static compareIngredients(recipe, pantryIngredients) {
     recipe.ingredients.forEach(ingredient => {
-      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
+      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name.toLowerCase())
       if(ingredientInPantry) {
-        if(ingredientInPantry.unit === ingredient.unit) {
+        if(ingredientInPantry.unit.toLowerCase() === ingredient.unit.toLowerCase()) {
           ingredient.detail = this.compareSameUnits(ingredientInPantry, ingredient)
         } else {
           ingredient.detail = this.compareDifferentUnits(ingredientInPantry, ingredient)
@@ -52,7 +52,7 @@ class IngredientsMeasurementConverter {
       } else {
         const potentialMatches = []
         pantryIngredients.forEach(pantryIngredient => {
-          if(ingredient.name.includes(pantryIngredient.name.toLowerCase()) || pantryIngredient.name.toLowerCase().includes(ingredient.name)) {
+          if(ingredient.name.toLowerCase().includes(pantryIngredient.name.toLowerCase()) || pantryIngredient.name.toLowerCase().includes(ingredient.name.toLowerCase())) {
             potentialMatches.push(Number(pantryIngredient.id))
           }
         })
@@ -93,9 +93,9 @@ class IngredientsMeasurementConverter {
 
   static getUpdatedIngredientTotals = (recipe, pantryIngredients) => {
     let updatedIngredients = recipe.ingredients.map(ingredient => {
-      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name)
+      const ingredientInPantry = pantryIngredients.find(pantryIngredient => pantryIngredient.name.toLowerCase() === ingredient.name.toLowerCase())
       if(ingredientInPantry) {
-        if(ingredientInPantry.unit === ingredient.unit) {
+        if(ingredientInPantry.unit.toLowerCase() === ingredient.unit.toLowerCase()) {
           const updatedIngredient = {
             ...ingredientInPantry,
             amount: ingredientInPantry.amount - ingredient.amount

@@ -7,15 +7,15 @@ class IngredientMeasurementConverter {
 
   static convertIngredient(ingredient) {
     let converted
-    if (this.gallons.includes(ingredient.unit)) {
+    if (this.gallons.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount * 768
-    } else if(this.cups.includes(ingredient.unit)) {
+    } else if(this.cups.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount * 48
-    } else if (this.ounces.includes(ingredient.unit)) {
+    } else if (this.ounces.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount * 6
-    } else if (this.tablespoons.includes(ingredient.unit)) {
+    } else if (this.tablespoons.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount * 3
-    } else if (this.teaspoons.includes(ingredient.unit)) {
+    } else if (this.teaspoons.includes(ingredient.unit.toLowerCase())) {
       converted = ingredient.amount
     }
     return converted
@@ -26,15 +26,15 @@ class IngredientMeasurementConverter {
     const convertedUsed = this.convertIngredient(ingredientUsed)
     const newConvertedTotal = convertedTotal - convertedUsed
     let updatedTotal
-    if (this.gallons.includes(ingredientTotal.unit)) {
+    if (this.gallons.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal / 768
-    } else if(this.cups.includes(ingredientTotal.unit)) {
+    } else if(this.cups.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal / 48
-    } else if (this.ounces.includes(ingredientTotal.unit)) {
+    } else if (this.ounces.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal / 6
-    } else if (this.tablespoons.includes(ingredientTotal.unit)) {
+    } else if (this.tablespoons.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal / 3
-    } else if (this.teaspoons.includes(ingredientTotal.unit)) {
+    } else if (this.teaspoons.includes(ingredientTotal.unit.toLowerCase())) {
       updatedTotal = newConvertedTotal
     }
     return updatedTotal
@@ -42,7 +42,7 @@ class IngredientMeasurementConverter {
   
   static compareIngredient(pantryIngredient, recipeIngredient) {
     let detail
-      if(recipeIngredient.unit === pantryIngredient.unit) {
+      if(recipeIngredient.unit.toLowerCase() === pantryIngredient.unit.toLowerCase()) {
         detail = this.compareSameUnits(pantryIngredient, recipeIngredient)
       } else {
         detail = this.compareDifferentUnits(pantryIngredient, recipeIngredient)
@@ -75,7 +75,7 @@ class IngredientMeasurementConverter {
   }
 
   static getUpdatedIngredientTotal = (pantryIngredient, recipeIngredient) => {
-    if(pantryIngredient.unit === recipeIngredient.unit) {
+    if(pantryIngredient.unit.toLowerCase() === recipeIngredient.unit.toLowerCase()) {
       const updatedIngredient = {
         ...pantryIngredient,
         amount: pantryIngredient.amount - recipeIngredient.amount

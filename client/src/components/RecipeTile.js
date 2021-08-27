@@ -1,19 +1,34 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import _ from "lodash"
 
 const RecipeTile = (props) => {
 
-  let capName
-  if(props.recipe.name) {
-    capName = props.recipe.name.charAt(0).toUpperCase() + props.recipe.name.slice(1)
+  const name = _.startCase(props.recipe.name)
+
+  let image
+  if(props.recipe.image) {
+    image = <img className="shadow" src={props.recipe.image} alt={`A picture of ${name}`}/>
+  } else {
+    image = <img 
+      className="shadow" 
+      src="http://thehalalworld.com/uploads/pages/Korean-Rice-Cake-and-Dumpling-Soup-Duk-Guk-and-Mandu.jpg" 
+      alt="A placeholder picture of a blurred out meal"
+    />
   }
 
   return (
-    <div>
-      <Link to={`/recipes/${props.recipe.id}`}>
-        <h3>{capName}</h3>
-        <p>{props.recipe.description}</p>
-      </Link>
+    <div className="callout hover-link">
+    <Link to={`/recipes/${props.recipe.id}`}>
+      <div className="grid-x left">
+        <div className="cell medium-8 text-middle">
+          <h3 className="title">{name}</h3>
+        </div>
+        <div className="cell medium-4 center">
+          {image}
+        </div>
+      </div>
+    </Link>
     </div>
   )
 }

@@ -201,7 +201,7 @@ const EditIngredientForm = (props) => {
         <input 
           type="submit" 
           value="Submit"
-          className="button blue round"
+          className="button blue round bold"
         />
       </form>
     </div>

@@ -1,13 +1,13 @@
 class RecipeSerializer {
   static getRecipeInfo(recipe) {
-    const allowedAttributes = ["name", "description", "id"]
+    const allowedAttributes = ["name", "id", "image"]
 
     let serializedRecipe = {}
     allowedAttributes.forEach(attribute => {
       serializedRecipe[attribute] = recipe[attribute]
     })
 
-    serializedRecipe.name = serializedRecipe.name.charAt(0).toUpperCase() + serializedRecipe.name.slice(1)
+    serializedRecipe.name = this.capitalize(serializedRecipe.name)
 
     return serializedRecipe
   }
@@ -28,7 +28,8 @@ class RecipeSerializer {
       allowedAttributes.forEach(attribute => {
         serializedStep[attribute] = step[attribute]
       })
-
+      serializedStep.step = this.capitalize(serializedStep.step)
+      
       return serializedStep
     })
 
@@ -40,6 +41,10 @@ class RecipeSerializer {
       allowedAttributes.forEach(attribute => {
         serializedIngredient[attribute] = ingredient[attribute]
       })
+      serializedIngredient.name = this.capitalize(serializedIngredient.name)
+      if (serializedIngredient.description) {
+        serializedIngredient.description = this.capitalize(serializedIngredient.description)
+      }
 
       return serializedIngredient
     })
@@ -48,6 +53,11 @@ class RecipeSerializer {
     serializedRecipe.ingredients = serializedIngredients
 
     return serializedRecipe
+  }
+
+  static capitalize(serializedData) {
+    serializedData = serializedData.charAt(0).toUpperCase() + serializedData.slice(1)
+    return serializedData
   }
 }
 
