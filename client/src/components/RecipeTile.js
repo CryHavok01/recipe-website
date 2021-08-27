@@ -10,7 +10,11 @@ const RecipeTile = (props) => {
   if(props.recipe.image) {
     image = <img className="shadow" src={props.recipe.image} alt={`A picture of ${name}`}/>
   } else {
-    image = <img className="shadow" src="http://thehalalworld.com/uploads/pages/Korean-Rice-Cake-and-Dumpling-Soup-Duk-Guk-and-Mandu.jpg" alt="A placeholder picture of a blurred out meal"/>
+    image = <img 
+      className="shadow" 
+      src="http://thehalalworld.com/uploads/pages/Korean-Rice-Cake-and-Dumpling-Soup-Duk-Guk-and-Mandu.jpg" 
+      alt="A placeholder picture of a blurred out meal"
+    />
   }
 
   return (
