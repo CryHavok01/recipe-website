@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import getRecipes from "../services/getRecipes"
+import getRecipes from "../../services/getRecipes"
 import RecipeTile from "./RecipeTile"
 
 const RecipeList = (props) => {

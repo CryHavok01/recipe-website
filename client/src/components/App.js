@@ -12,10 +12,10 @@ import HomePage from "./HomePage";
 import IngredientsList from "./ingredients/IngredientsList";
 import IngredientShow from "./ingredients/IngredientShow";
 import NewIngredient from "./ingredients/NewIngredient";
-import RecipeList from "./RecipeList";
-import RecipeShow from "./RecipeShow";
-import RecipeSearch from "./RecipeSearch";
-import SearchedRecipeShow from "./SearchedRecipeShow";
+import RecipeList from "./recipes/RecipeList";
+import RecipeShow from "./recipes/RecipeShow";
+import RecipeSearch from "./search/RecipeSearch";
+import SearchedRecipeShow from "./search/SearchedRecipeShow";
 import { Link } from "react-router-dom";
 
 const App = (props) => {
