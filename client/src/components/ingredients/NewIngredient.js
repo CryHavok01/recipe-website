@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import translateServerErrors from "../services/translateServerErrors"
-import ErrorList from "./shared/ErrorList"
-import FormError from "./layout/FormError"
+import translateServerErrors from "../../services/translateServerErrors"
+import ErrorList from "../shared/ErrorList"
+import FormError from "../layout/FormError"
 import { Redirect } from "react-router-dom"
 
 const NewIngredient = (props) => {

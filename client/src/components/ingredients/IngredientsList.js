@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import getIngredients from "../services/getIngredients"
+import getIngredients from "../../services/getIngredients"
 import IngredientTile from "./IngredientTile"
 
 const IngredientsList = (props) => {

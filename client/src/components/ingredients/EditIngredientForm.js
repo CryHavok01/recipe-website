@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import FormError from "./layout/FormError"
-import { Redirect, useParams } from "react-router-dom"
+import FormError from "../layout/FormError"
+import { useParams } from "react-router-dom"
 
 const EditIngredientForm = (props) => {
   const [showOther, setShowOther] = useState(false)
