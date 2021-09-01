@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { hot } from "react-hot-loader/root";
 
 import getCurrentUser from "../services/getCurrentUser";
@@ -17,7 +17,6 @@ import RecipeShow from "./recipes/RecipeShow";
 import NewRecipeForm from "./recipes/NewRecipeForm";
 import RecipeSearch from "./search/RecipeSearch";
 import SearchedRecipeShow from "./search/SearchedRecipeShow";
-import { Link } from "react-router-dom";
 
 const App = (props) => {
   const [currentUser, setCurrentUser] = useState(undefined);
