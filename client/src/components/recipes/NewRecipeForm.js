@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import FormError from "../layout/FormError"
 
 const NewRecipeForm = (props) => {
 
@@ -8,14 +9,15 @@ const NewRecipeForm = (props) => {
     ingredients: [{ name: "", amount: "", unit: "", description: "", other: false}],
     steps: [{ step: "" }]
   })
+  const [errors, setErrors] = useState({ ingredients: [], steps: [] })
 
-  let handleChange = (event) => {
+  const handleChange = (event) => {
       let newFormValues = {...formValues};
       newFormValues[event.target.name] = event.target.value;
       setFormValues(newFormValues);
     }
   
-  let handleIngredientChange = (index, event) => {
+  const handleIngredientChange = (index, event) => {
     let newFormValues = {...formValues}
     newFormValues.ingredients[index][event.target.name] = event.target.value
     setFormValues(newFormValues)
@@ -32,20 +34,20 @@ const NewRecipeForm = (props) => {
     setFormValues(newFormValues)
   }
   
-  let handleStepChange = (index, event) => {
+  const handleStepChange = (index, event) => {
     let newFormValues = {...formValues}
     newFormValues.steps[index][event.target.name] = event.target.value
     setFormValues(newFormValues)
   }
   
-  let addIngredientFormFields = () => {
+  const addIngredientFormFields = () => {
       setFormValues({
         ...formValues,
         ingredients: [...formValues.ingredients, { name: "", amount: "", unit: "", description: ""}]
       })
     }
   
-  let removeIngredientFormFields = (index) => {
+  const removeIngredientFormFields = (index) => {
       let newFormValues = {...formValues};
       newFormValues.ingredients.splice(index, 1);
       setFormValues(newFormValues)
@@ -58,15 +60,72 @@ const NewRecipeForm = (props) => {
     })
   }
 
-  let removeStepFormFields = (index) => {
+  const removeStepFormFields = (index) => {
       let newFormValues = {...formValues};
       newFormValues.steps.splice(index, 1);
       setFormValues(newFormValues)
   }
   
-  let handleSubmit = (event) => {
+  const handleSubmit = (event) => {
       event.preventDefault();
-      alert(JSON.stringify(formValues));
+      console.log(validateData(formValues));
+  }
+
+  const validateData = (formValues) => {
+    setErrors({ ingredients: [], steps: [] });
+    const { name, description, ingredients, steps } = formValues
+    let foundError = false
+    let newErrors = { ingredients: [], steps: [] };
+    if (name.trim() == "") {
+      newErrors = {
+        ...newErrors,
+        name: "is required",
+      };
+      foundError = true
+    }
+
+    if (description.trim() == "") {
+      newErrors = {
+        ...newErrors,
+        description: "is required"
+      }
+      foundError = true
+    }
+
+    ingredients.forEach((ingredient, index) => {
+      newErrors = { ...newErrors }
+      newErrors.ingredients.push({})
+      if (ingredient.name.trim() == "") {
+        newErrors = { ...newErrors }
+        newErrors.ingredients[index].name = "is required"
+        foundError = true
+      }
+
+      if (ingredient.amount.trim() == "") {
+        newErrors = { ...newErrors };
+        newErrors.ingredients[index].amount = "is required"
+        foundError = true
+      }
+      
+      if (ingredient.unit.trim() == "") {
+        newErrors = { ...newErrors };
+        newErrors.ingredients[index].unit = "is required"
+        foundError = true
+      }
+    })
+
+    steps.forEach((step, index) => {
+      newErrors = { ...newErrors }
+      newErrors.steps.push({})
+      if (step.step.trim() == "") {
+        newErrors = { ...newErrors }
+        newErrors.steps[index].step = "is required"
+        foundError = true
+      }
+    })
+
+    setErrors(newErrors);
+    return foundError
   }
 
   let ingredientFields 
@@ -104,6 +163,10 @@ const NewRecipeForm = (props) => {
             value={ingredient.name}
             onChange={(event) => handleIngredientChange(index, event)}
           />
+          { errors.ingredients[index] ? 
+            <FormError error={errors.ingredients[index].name} />
+            : null
+          }
 
           <label>Amount:</label>
           <input
@@ -115,6 +178,10 @@ const NewRecipeForm = (props) => {
             value={ingredient.amount}
             onChange={(event) => handleIngredientChange(index, event)}
           />
+          { errors.ingredients[index] ? 
+            <FormError error={errors.ingredients[index].amount} />
+            : null
+          }
 
           <label>Units:</label>
           <select id="unit" name="unit" defaultValue="select" onChange={(event) => handleSelectUnit(index, event)}>
@@ -127,6 +194,10 @@ const NewRecipeForm = (props) => {
             <option value="other">Other</option>
           </select>
           {ingredient.other ? otherField : null}
+          { errors.ingredients[index] ? 
+            <FormError error={errors.ingredients[index].unit} />
+            : null
+          }
 
           <label>Description (optional):</label>
           <input
@@ -165,6 +236,10 @@ const NewRecipeForm = (props) => {
             value={step.step}
             onChange={(event) => handleStepChange(index, event)}
           />
+          { errors.steps[index] ? 
+            <FormError error={errors.steps[index].step} />
+            : null
+          }
 
           { index ? removeButton : null }
         </div>
@@ -174,15 +249,16 @@ const NewRecipeForm = (props) => {
 
   return (
       <form id="recipe-form" onSubmit={handleSubmit}>
-        <label>Recipe Name</label>
+        <label>Recipe Name:</label>
         <input
           type="text"
           name="name"
           value={formValues.name}
           onChange={handleChange}
         />
+        <FormError error={errors.name} />
 
-        <label>Description</label>
+        <label>Description (optional):</label>
         <input
           type="text"
           name="description"
