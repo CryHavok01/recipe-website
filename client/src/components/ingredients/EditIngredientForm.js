@@ -182,6 +182,7 @@ const EditIngredientForm = (props) => {
           <option value="tbsp">Tablespoon(s)</option>
           <option value="oz">Ounce(s)</option>
           <option value="cup">Cup(s)</option>
+          <option value="gal">Gallon(s)</option>
           <option value="other">Other</option>
         </select>
 
