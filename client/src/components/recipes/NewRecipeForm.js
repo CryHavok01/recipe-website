@@ -173,7 +173,7 @@ const NewRecipeForm = (props) => {
       const removeButton = (
         <button
           type="button"
-          className="button remove"
+          className="button blue round remove"
           onClick={() => removeIngredientFormFields(index)}
         >
           Remove
@@ -245,7 +245,7 @@ const NewRecipeForm = (props) => {
       const removeButton = (
         <button
           type="button"
-          className="button remove"
+          className="button blue round remove"
           onClick={() => removeStepFormFields(index)}
         >
           Remove
@@ -281,9 +281,11 @@ const NewRecipeForm = (props) => {
 
   return (
     <div className="grid-container">
+      <h2 className="title">Add Your New Recipe</h2>
       <div className="callout">
         <ErrorList errors={serverErrors} />
           <form id="recipe-form" onSubmit={handleSubmit}>
+            <h4>Recipe</h4>
             <label>Recipe Name:</label>
             <input
               type="text"
@@ -301,10 +303,11 @@ const NewRecipeForm = (props) => {
               onChange={handleChange}
             />
 
+            <h4>Ingredients</h4>
             {ingredientFields}
             <div className="button-section">
                 <button
-                  className="button add"
+                  className="button blue round add"
                   type="button"
                   onClick={addIngredientFormFields}
                 >
@@ -312,9 +315,10 @@ const NewRecipeForm = (props) => {
                 </button>
             </div>
 
+            <h4>Steps</h4>
             {stepFields}
               <button
-                className="button add"
+                className="button blue round add margin-5"
                 type="button"
                 onClick={addStepFormFields}
               >
@@ -322,7 +326,7 @@ const NewRecipeForm = (props) => {
               </button>
 
               <button
-                className="button submit"
+                className="button blue round submit margin-5"
                 type="submit"
               >
                 Submit
