@@ -27,5 +27,5 @@ $ yarn run dev
 ```
 # Upcoming Features
 I will continue to add features to the website over the coming weeks, including
-- Ability to add and edit recipes
+- Ability to edit recipes
 - Integrate Documenu API to suggest local restaurants with similar dishes if user doesn't have enough ingredients to make a recipe
