@@ -44,6 +44,9 @@ usersRecipesRouter.get("/:recipeId", async (req, res) => {
 
 usersRecipesRouter.post("/", async (req, res) => {
   const { recipe, ingredients, steps } = req.body
+  console.log(recipe)
+  console.log(ingredients)
+  console.log(steps)
   const user = req.user
   try {
     const existingRecipe = await Recipe.query().findOne({ spoonacularId: recipe.spoonacularId })

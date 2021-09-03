@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router"
 import RecipeIngredientTile from "./RecipeIngredientTile"
-import IngredientMeasurementConverter from "../services/IngredientMeasurementConverter"
+import IngredientMeasurementConverter from "../../services/IngredientMeasurementConverter"
 import { Link } from "react-router-dom"
 import _ from "lodash"
 
@@ -48,7 +48,6 @@ const RecipeShow = (props) => {
           body: JSON.stringify(updatedIngredientData)
         })
         if(response.ok) {
-          fetchRecipeDetails()
           setMade(true)
         }
       } catch(err) {

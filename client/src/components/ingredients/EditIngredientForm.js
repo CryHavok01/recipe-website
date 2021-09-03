@@ -1,10 +1,10 @@
-import React, { useState } from "react"
-import translateServerErrors from "../services/translateServerErrors"
-import ErrorList from "./shared/ErrorList"
-import FormError from "./layout/FormError"
-import { Redirect } from "react-router-dom"
+import React, { useEffect, useState } from "react"
+import FormError from "../layout/FormError"
+import { useParams } from "react-router-dom"
 
-const NewIngredient = (props) => {
+const EditIngredientForm = (props) => {
+  const [showOther, setShowOther] = useState(false)
+  const [ingredient, setIngredient] = useState({})
   const [formData, setFormData] = useState({
     name: "",
     amount: "",
@@ -12,9 +12,33 @@ const NewIngredient = (props) => {
     description: ""
   })
   const [errors, setErrors] = useState({})
-  const [serverErrors, setServerErrors] = useState([])
-  const [showOther, setShowOther] = useState(false)
-  const [shouldRedirect, setShouldRedirect] = useState(false)
+
+  const { id } = useParams()
+  
+  const fetchIngredientDetails = async () => {
+    try {
+      const response = await fetch(`/api/v1/users/ingredients/${id}`)
+      if (response.ok) {
+        const body = await response.json()
+        setIngredient(body.ingredient)
+      }
+    } catch(err) {
+      console.error(`Error in Fetch: ${err.message}`)
+    }
+  } 
+
+  useEffect(() => {
+    fetchIngredientDetails()
+  }, [])
+
+  useEffect(() => {
+      setFormData({
+        name: ingredient.name,
+        amount: ingredient.amount,
+        unit: ingredient.unit,
+        description: ingredient.description || ""
+      })
+  }, [ingredient])
 
   const validateData = (formData) => {
     setErrors({});
@@ -61,27 +85,28 @@ const NewIngredient = (props) => {
     event.preventDefault()
     const foundError = validateData(formData)
     if (!foundError) {
-      const formPayload = { newIngredient: { ...formData } }
+      const formPayload = {
+        editedIngredient: { ...formData, id: ingredient.id }
+      }
       try {
         const response = await fetch(`/api/v1/ingredients`, {
-          method: "POST",
+          method: "PATCH",
           headers: new Headers({
             "Content-Type": "application/json"
           }),
           body: JSON.stringify(formPayload)
         })
         if(!response.ok) {
-          if(response.status === 422) {
-            const body = await response.json()
-            const newErrors = translateServerErrors(body.errors)
-            return setServerErrors(newErrors)
-          } else {
-            const errorMessage = `${response.status}: (${response.statusText})`
-            const error = new Error(errorMessage)
-            throw(error)
-          }
+          const errorMessage = `${response.status}: (${response.statusText})`
+          const error = new Error(errorMessage)
+          throw(error)
         } else {
-          setShouldRedirect(true)
+          const body = await response.json()
+          props.setIngredient(body.editedIngredient)
+          props.setShowEdit(false)
+          if(ingredient.id !== body.editedIngredient.id) {
+            props.setShouldRedirectToIngredient(true)
+          }
         }
       } catch(error) {
         console.error(`Error in Fetch: ${error.message}`)
@@ -124,17 +149,10 @@ const NewIngredient = (props) => {
     )
   }
 
-  if (shouldRedirect) {
-    return (
-      <Redirect push to="/ingredients" />
-    )
-  }
-
   return(
-    <div className="grid-container">
-      <h2 className="title">Add Your New Ingredient</h2>
+    <div>
+      <h2 className="title">Edit Details for {ingredient.name}</h2>
       <form className="callout" onSubmit={handleSubmit}>
-        <ErrorList errors={serverErrors} />
         <label htmlFor="name">Name: </label>
         <input 
           type="text" 
@@ -157,14 +175,14 @@ const NewIngredient = (props) => {
         />
         <FormError error={errors.amount} />
 
-
         <label htmlFor="unit">Units: </label>
         <select id="unit" name="unit" defaultValue="select" onChange={handleSelect}>
-          <option hidden disabled value="select"> -- select an option -- </option>
+          <option hidden disabled value="select"> {formData.unit} </option>
           <option value="tsp">Teaspoon(s)</option>
           <option value="tbsp">Tablespoon(s)</option>
           <option value="oz">Ounce(s)</option>
           <option value="cup">Cup(s)</option>
+          <option value="gal">Gallon(s)</option>
           <option value="other">Other</option>
         </select>
 
@@ -184,11 +202,11 @@ const NewIngredient = (props) => {
         <input 
           type="submit" 
           value="Submit"
-          className="button blue round"
+          className="button blue round bold"
         />
       </form>
     </div>
   )
 }
 
-export default NewIngredient
+export default EditIngredientForm

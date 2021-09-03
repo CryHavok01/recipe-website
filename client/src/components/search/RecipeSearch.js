@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import apiSearch from "../services/apiSearch"
+import apiSearch from "../../services/apiSearch"
 import SearchedRecipeTile from "./SearchedRecipeTile"
 
 const RecipeSearch = (props) => {

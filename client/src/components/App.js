@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { hot } from "react-hot-loader/root";
 
 import getCurrentUser from "../services/getCurrentUser";
@@ -9,14 +9,14 @@ import SignInForm from "./authentication/SignInForm";
 import TopBar from "./layout/TopBar";
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute";
 import HomePage from "./HomePage";
-import IngredientsList from "./IngredientsList";
-import IngredientShow from "./IngredientShow";
-import NewIngredient from "./NewIngredient";
-import RecipeList from "./RecipeList";
-import RecipeShow from "./RecipeShow";
-import RecipeSearch from "./RecipeSearch";
-import SearchedRecipeShow from "./SearchedRecipeShow";
-import { Link } from "react-router-dom";
+import IngredientsList from "./ingredients/IngredientsList";
+import IngredientShow from "./ingredients/IngredientShow";
+import NewIngredient from "./ingredients/NewIngredient";
+import RecipeList from "./recipes/RecipeList";
+import RecipeShow from "./recipes/RecipeShow";
+import NewRecipeForm from "./recipes/NewRecipeForm";
+import RecipeSearch from "./search/RecipeSearch";
+import SearchedRecipeShow from "./search/SearchedRecipeShow";
 
 const App = (props) => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -64,9 +64,10 @@ const App = (props) => {
         <AuthenticatedRoute exact path="/ingredients/new" component={NewIngredient} user={currentUser} />
         <AuthenticatedRoute exact path="/ingredients/:id" component={IngredientShow} user={currentUser} />
         <AuthenticatedRoute exact path="/recipes" component={RecipeList} user={currentUser} />
+        <AuthenticatedRoute exact path="/recipes/new" component={NewRecipeForm} user={currentUser} />
         <AuthenticatedRoute exact path="/recipes/:id" component={RecipeShow} user={currentUser} />
         <AuthenticatedRoute exact path="/search" component={RecipeSearch} user={currentUser} />
-        <AuthenticatedRoute exact path="/search/:id" component={SearchedRecipeShow} user={currentUser} />
+        <AuthenticatedRoute exact path="/search/:id" component={SearchedRecipeShow} user={currentUser} /> 
       </Switch>
     </Router>
   );

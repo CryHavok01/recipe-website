@@ -11,7 +11,8 @@ const clientRoutes = [
   "/ingredients", 
   "/ingredients/new", 
   "/ingredients/:id", 
-  "/recipes", 
+  "/recipes",
+  "/recipes/new",
   "/recipes/:recipeId",
   "/search",
   "/search/:id"

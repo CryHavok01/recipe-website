@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import _ from "lodash"
-import defaultPic from "../../public/default_recipe_image.jpeg"
+import defaultPic from "../../../public/default_recipe_image.jpeg"
 
 const RecipeTile = (props) => {
 
