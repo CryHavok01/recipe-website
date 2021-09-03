@@ -1,5 +1,8 @@
 import React, { useState } from "react"
 import FormError from "../layout/FormError"
+import ErrorList from "../shared/ErrorList"
+import translateServerErrors from "../../services/translateServerErrors"
+import { Redirect } from "react-router-dom"
 
 const NewRecipeForm = (props) => {
 
@@ -10,6 +13,9 @@ const NewRecipeForm = (props) => {
     steps: [{ step: "" }]
   })
   const [errors, setErrors] = useState({ ingredients: [], steps: [] })
+  const [serverErrors, setServerErrors] = useState([])
+  const [shouldRedirect, setShouldRedirect] = useState(false)
+  const [newRecipeId, setNewRecipeId] = useState(null)
 
   const handleChange = (event) => {
       let newFormValues = {...formValues};
@@ -66,14 +72,42 @@ const NewRecipeForm = (props) => {
       setFormValues(newFormValues)
   }
   
-  const handleSubmit = (event) => {
-      event.preventDefault();
-      console.log(validateData(formValues));
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const foundErrors = validateData(formValues);
+    if(!foundErrors) {
+      try {
+        const formPayload = { newRecipe: { ...formValues }}
+        const response = await fetch(`/api/v1/recipes/new`, {
+          method: "POST",
+          headers: new Headers({
+            "Content-Type": "application/json"
+          }),
+          body: JSON.stringify(formPayload)
+        })
+        if(!response.ok) {
+          if(response.status === 422) {
+            const body = await response.json()
+            const newErrors = translateServerErrors(body.errors)
+            return setServerErrors(newErrors)
+          } else {
+            const errorMessage = `${response.status}: (${response.statusText})`
+            const error = new Error(errorMessage)
+            throw(error)
+          }
+        }
+        const { recipe } = await response.json()
+        setNewRecipeId(recipe.id)
+        setShouldRedirect(true)
+      } catch(error) {
+        console.error(`Error in Fetch: ${error.message}`)
+      }
+    }
   }
 
   const validateData = (formValues) => {
     setErrors({ ingredients: [], steps: [] });
-    const { name, description, ingredients, steps } = formValues
+    const { name, ingredients, steps } = formValues
     let foundError = false
     let newErrors = { ingredients: [], steps: [] };
     if (name.trim() == "") {
@@ -81,14 +115,6 @@ const NewRecipeForm = (props) => {
         ...newErrors,
         name: "is required",
       };
-      foundError = true
-    }
-
-    if (description.trim() == "") {
-      newErrors = {
-        ...newErrors,
-        description: "is required"
-      }
       foundError = true
     }
 
@@ -154,7 +180,7 @@ const NewRecipeForm = (props) => {
         </button>
       )
       return (
-        <div key={index}>
+        <div key={index} className="callout secondary">
           <p>Ingredient {index+1}</p>
           <label>Name:</label>
           <input
@@ -227,7 +253,7 @@ const NewRecipeForm = (props) => {
       )
 
       return (
-        <div key={index}>
+        <div key={index} className="callout secondary">
           <p>Step {index+1}</p>
           <label>Instructions</label>
           <textarea
@@ -247,52 +273,63 @@ const NewRecipeForm = (props) => {
     })
   }
 
+  if(shouldRedirect) {
+    return (
+      <Redirect push to={`/recipes/${newRecipeId}`} />
+    )
+  }
+
   return (
-      <form id="recipe-form" onSubmit={handleSubmit}>
-        <label>Recipe Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={formValues.name}
-          onChange={handleChange}
-        />
-        <FormError error={errors.name} />
+    <div className="grid-container">
+      <div className="callout">
+        <ErrorList errors={serverErrors} />
+          <form id="recipe-form" onSubmit={handleSubmit}>
+            <label>Recipe Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={formValues.name}
+              onChange={handleChange}
+            />
+            <FormError error={errors.name} />
 
-        <label>Description (optional):</label>
-        <input
-          type="text"
-          name="description"
-          value={formValues.description}
-          onChange={handleChange}
-        />
+            <label>Description (optional):</label>
+            <input
+              type="text"
+              name="description"
+              value={formValues.description}
+              onChange={handleChange}
+            />
 
-        {ingredientFields}
-        <div className="button-section">
-            <button
-              className="button add"
-              type="button"
-              onClick={addIngredientFormFields}
-            >
-              Add Ingredient
-            </button>
-        </div>
+            {ingredientFields}
+            <div className="button-section">
+                <button
+                  className="button add"
+                  type="button"
+                  onClick={addIngredientFormFields}
+                >
+                  Add Ingredient
+                </button>
+            </div>
 
-        {stepFields}
-          <button
-            className="button add"
-            type="button"
-            onClick={addStepFormFields}
-          >
-            Add Step
-          </button>
+            {stepFields}
+              <button
+                className="button add"
+                type="button"
+                onClick={addStepFormFields}
+              >
+                Add Step
+              </button>
 
-          <button
-            className="button submit"
-            type="submit"
-          >
-            Submit
-          </button>
-    </form>
+              <button
+                className="button submit"
+                type="submit"
+              >
+                Submit
+              </button>
+        </form>
+      </div>
+    </div>
   )
 }
 
