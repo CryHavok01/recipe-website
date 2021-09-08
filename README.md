@@ -21,11 +21,11 @@ You can then migrate and seed the database by running the following commands in 
 $ yarn run migrate:latest
 $ yarn run db:seed
 ```
-Run the website on a local server by using the following commant in the terminal under /server:
+Run the website on a local server by using the following command in the terminal under /server:
 ```
 $ yarn run dev
 ```
 # Upcoming Features
 I will continue to add features to the website over the coming weeks, including
-- Ability to add and edit recipes
+- Ability to edit recipes
 - Integrate Documenu API to suggest local restaurants with similar dishes if user doesn't have enough ingredients to make a recipe
