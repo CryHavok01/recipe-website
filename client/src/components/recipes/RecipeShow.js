@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useParams } from "react-router"
+import { Redirect, useParams } from "react-router"
 import RecipeIngredientTile from "./RecipeIngredientTile"
 import IngredientMeasurementConverter from "../../services/IngredientMeasurementConverter"
 import { Link } from "react-router-dom"
@@ -11,6 +11,7 @@ const RecipeShow = (props) => {
   const [pantryIngredients, setPantryIngredients] = useState([])
   const [updatedIngredients, setUpdatedIngredients] = useState([])
   const [made, setMade] = useState(false)
+  const [shouldRedirect, setShouldRedirect] = useState(false)
 
   const { id } = useParams()
 
@@ -52,6 +53,27 @@ const RecipeShow = (props) => {
         }
       } catch(err) {
         console.error(`Error in Fetch: ${err.message}`)
+      }
+    }
+
+    const deleteRecipe = async (event) => {
+      const confirmed = confirm("Are you sure you want to delete this recipe?")
+      if (confirmed) {
+        const deletePayload = { recipeId: id }
+        try {
+         const response = await fetch("/api/v1/recipes/", {
+           method: "DELETE",
+           headers: new Headers({
+             "Content-Type": "application/json"
+           }),
+           body: JSON.stringify(deletePayload)
+         }) 
+         if(response.ok) {
+           setShouldRedirect(true)
+         }
+        } catch(err) {
+          console.error(`Error in Fetch: ${err.message}`)
+        }
       }
     }
 
@@ -129,6 +151,12 @@ const RecipeShow = (props) => {
 
   const name = _.startCase(recipe.name)
 
+  if(shouldRedirect) {
+    return(
+      <Redirect push to="/recipes" />
+    )
+  }
+
   return(
     <div className="grid-container center">
       <h1 className="title">{name}</h1>
@@ -149,6 +177,7 @@ const RecipeShow = (props) => {
           {made ? madeNotice : makeButton}
         </div>
       </div>
+      <button className="button blue round bold" onClick={deleteRecipe}>Delete</button>
     </div>
   )
 }
