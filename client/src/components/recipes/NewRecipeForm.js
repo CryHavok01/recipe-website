@@ -3,6 +3,7 @@ import FormError from "../layout/FormError"
 import ErrorList from "../shared/ErrorList"
 import translateServerErrors from "../../services/translateServerErrors"
 import { Redirect } from "react-router-dom"
+import RecipeFormHelper from "../../services/RecipeFormHelper"
 
 const NewRecipeForm = (props) => {
 
@@ -18,58 +19,35 @@ const NewRecipeForm = (props) => {
   const [newRecipeId, setNewRecipeId] = useState(null)
 
   const handleChange = (event) => {
-      let newFormValues = {...formValues};
-      newFormValues[event.target.name] = event.target.value;
-      setFormValues(newFormValues);
+      setFormValues(RecipeFormHelper.handleChange(event, formValues));
     }
   
   const handleIngredientChange = (index, event) => {
-    let newFormValues = {...formValues}
-    newFormValues.ingredients[index][event.target.name] = event.target.value
-    setFormValues(newFormValues)
+    setFormValues(RecipeFormHelper.handleIngredientChange(index, event, formValues))
   }
 
   const handleSelectUnit = (index, event) => {
-    let newFormValues = {...formValues}
-    newFormValues.ingredients[index][event.currentTarget.name] = event.currentTarget.value
-    if (event.currentTarget.value === "other") {
-      newFormValues.ingredients[index].other = true
-    } else {
-      newFormValues.ingredients[index].other = false
-    }
-    setFormValues(newFormValues)
+    setFormValues(RecipeFormHelper.handleSelectUnit(index, event, formValues))
   }
   
   const handleStepChange = (index, event) => {
-    let newFormValues = {...formValues}
-    newFormValues.steps[index][event.target.name] = event.target.value
-    setFormValues(newFormValues)
+    setFormValues(RecipeFormHelper.handleStepChange(index, event, formValues))
   }
   
   const addIngredientFormFields = () => {
-      setFormValues({
-        ...formValues,
-        ingredients: [...formValues.ingredients, { name: "", amount: "", unit: "", description: ""}]
-      })
+      setFormValues(RecipeFormHelper.addIngredientFormFields(formValues))
     }
   
   const removeIngredientFormFields = (index) => {
-      let newFormValues = {...formValues};
-      newFormValues.ingredients.splice(index, 1);
-      setFormValues(newFormValues)
+      setFormValues(RecipeFormHelper.removeIngredientFormFields(index, formValues))
   }
 
   let addStepFormFields = () => {
-    setFormValues({
-      ...formValues,
-      steps: [...formValues.steps, { step: "" }]
-    })
+    setFormValues(RecipeFormHelper.addStepFormFields(formValues))
   }
 
   const removeStepFormFields = (index) => {
-      let newFormValues = {...formValues};
-      newFormValues.steps.splice(index, 1);
-      setFormValues(newFormValues)
+      setFormValues(RecipeFormHelper.removeStepFormFields(index, formValues))
   }
   
   const handleSubmit = async (event) => {

@@ -1,5 +1,5 @@
 import express from "express"
-import { PantryMeasurement, Ingredient } from "../../../models/index.js"
+import { PantryMeasurement, Ingredient, Favorite } from "../../../models/index.js"
 import cleanNewRecipeData from "../../../services/cleanNewRecipeData.js"
 
 const recipesRouter = new express.Router()
@@ -64,6 +64,17 @@ recipesRouter.post("/new", async (req, res) => {
     return res.status(200).json({ recipe: insertedRecipe })
   } catch(err) {
     return res.status(422).json({ err })
+  }
+})
+
+recipesRouter.delete("/", async (req, res) => {
+  const user = req.user;
+  const { recipeId } = req.body;
+  try{
+    const deleted = await user.$relatedQuery("favorites").delete().where("recipeId", recipeId)
+    return res.status(200).json({ message: "Successful deletion" })
+  } catch(error) {
+    return res.status(500).json({ error })
   }
 })
 
