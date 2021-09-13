@@ -25,6 +25,10 @@ Run the website on a local server by using the following command in the terminal
 ```
 $ yarn run dev
 ```
+# Recent Updates
+- Ability to add new recipes from scratch, in addition to searching via API
+- Ability to delete recipes from your cookbook
+
 # Upcoming Features
 I will continue to add features to the website over the coming weeks, including
 - Ability to edit recipes
