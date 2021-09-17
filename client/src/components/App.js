@@ -14,6 +14,7 @@ import IngredientShow from "./ingredients/IngredientShow";
 import NewIngredient from "./ingredients/NewIngredient";
 import RecipeList from "./recipes/RecipeList";
 import RecipeShow from "./recipes/RecipeShow";
+import EditRecipeForm from "./recipes/EditRecipeForm";
 import NewRecipeForm from "./recipes/NewRecipeForm";
 import RecipeSearch from "./search/RecipeSearch";
 import SearchedRecipeShow from "./search/SearchedRecipeShow";
@@ -66,6 +67,7 @@ const App = (props) => {
         <AuthenticatedRoute exact path="/recipes" component={RecipeList} user={currentUser} />
         <AuthenticatedRoute exact path="/recipes/new" component={NewRecipeForm} user={currentUser} />
         <AuthenticatedRoute exact path="/recipes/:id" component={RecipeShow} user={currentUser} />
+        <AuthenticatedRoute exact path="/edit-recipe/:id" component={EditRecipeForm} user={currentUser} />
         <AuthenticatedRoute exact path="/search" component={RecipeSearch} user={currentUser} />
         <AuthenticatedRoute exact path="/search/:id" component={SearchedRecipeShow} user={currentUser} /> 
       </Switch>

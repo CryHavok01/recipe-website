@@ -1,8 +1,20 @@
 import express from "express"
-import { PantryMeasurement, Ingredient, Favorite } from "../../../models/index.js"
+import { PantryMeasurement, Ingredient, Recipe } from "../../../models/index.js"
 import cleanNewRecipeData from "../../../services/cleanNewRecipeData.js"
+import RecipeSerializer from "../../../serializers/RecipeSerializer.js"
 
 const recipesRouter = new express.Router()
+
+recipesRouter.get("/:id", async (req, res) => {
+  const { id } = req.params
+  try {
+    const recipe = await Recipe.query().findById(id)
+    const serializedRecipe = await RecipeSerializer.getRecipeWithDetails(recipe)
+    return res.status(200).json({ recipe: serializedRecipe })
+  } catch(err) {
+    return res.status(500).json({ err })
+  }
+})
 
 recipesRouter.post("/make", async (req, res) => {
   const updatedIngredients = req.body
@@ -75,6 +87,24 @@ recipesRouter.delete("/", async (req, res) => {
     return res.status(200).json({ message: "Successful deletion" })
   } catch(error) {
     return res.status(500).json({ error })
+  }
+})
+
+recipesRouter.patch("/edit", async (req, res) => {
+  const user = req.user;
+  const { editedRecipe } = req.body;
+  const id = editedRecipe.id;
+  const cleanedRecipe = cleanNewRecipeData(editedRecipe)
+  console.log(id)
+  console.log(cleanedRecipe)
+  try {
+    const currentRecipe = await Recipe.query().findById(id)
+    const existingRecipe = await user.$relatedQuery("recipes").findOne({ name: editedRecipe.name })
+    console.log(currentRecipe)
+    console.log(existingRecipe)
+    //trx for recipe, ingredients, steps
+  } catch(err) {
+
   }
 })
 
