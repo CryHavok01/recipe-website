@@ -1,8 +1,20 @@
 import express from "express"
-import { PantryMeasurement, Ingredient, Favorite } from "../../../models/index.js"
+import { PantryMeasurement, Ingredient, Recipe } from "../../../models/index.js"
 import cleanNewRecipeData from "../../../services/cleanNewRecipeData.js"
+import RecipeSerializer from "../../../serializers/RecipeSerializer.js"
 
 const recipesRouter = new express.Router()
+
+recipesRouter.get("/:id", async (req, res) => {
+  const { id } = req.params
+  try {
+    const recipe = await Recipe.query().findById(id)
+    const serializedRecipe = await RecipeSerializer.getRecipeWithDetails(recipe)
+    return res.status(200).json({ recipe: serializedRecipe })
+  } catch(err) {
+    return res.status(500).json({ err })
+  }
+})
 
 recipesRouter.post("/make", async (req, res) => {
   const updatedIngredients = req.body

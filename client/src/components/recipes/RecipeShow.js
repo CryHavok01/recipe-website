@@ -177,7 +177,7 @@ const RecipeShow = (props) => {
           {made ? madeNotice : makeButton}
         </div>
       </div>
-      <Link to={`/recipes/edit/${id}`}>
+      <Link to={`/edit-recipe/${id}`}>
         <button className="button round blue bold margin-5">Edit Recipe</button>
       </Link>
       <button className="button blue round bold margin-5" onClick={deleteRecipe}>Delete Recipe</button>
