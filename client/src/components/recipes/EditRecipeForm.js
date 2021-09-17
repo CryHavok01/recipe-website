@@ -70,16 +70,16 @@ const EditRecipeForm = (props) => {
     const handleSubmit = async (event) => {
       event.preventDefault();
       const foundErrors = validateData(formValues);
-      // if(!foundErrors) {
-      //   try {
-      //     const formPayload = { newRecipe: { ...formValues }}
-      //     const response = await fetch(`/api/v1/recipes/new`, {
-      //       method: "POST",
-      //       headers: new Headers({
-      //         "Content-Type": "application/json"
-      //       }),
-      //       body: JSON.stringify(formPayload)
-      //     })
+      if(!foundErrors) {
+        try {
+          const formPayload = { editedRecipe: { ...formValues } }
+          const response = await fetch(`/api/v1/recipes/edit`, {
+            method: "PATCH",
+            headers: new Headers({
+              "Content-Type": "application/json"
+            }),
+            body: JSON.stringify(formPayload)
+          })
       //     if(!response.ok) {
       //       if(response.status === 422) {
       //         const body = await response.json()
@@ -94,10 +94,10 @@ const EditRecipeForm = (props) => {
       //     const { recipe } = await response.json()
       //     setNewRecipeId(recipe.id)
       //     setShouldRedirect(true)
-      //   } catch(error) {
-      //     console.error(`Error in Fetch: ${error.message}`)
-      //   }
-      // }
+        } catch(error) {
+          console.error(`Error in Fetch: ${error.message}`)
+        }
+      }
     }
   
     const validateData = (formValues) => {

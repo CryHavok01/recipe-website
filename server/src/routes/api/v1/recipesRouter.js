@@ -90,4 +90,22 @@ recipesRouter.delete("/", async (req, res) => {
   }
 })
 
+recipesRouter.patch("/edit", async (req, res) => {
+  const user = req.user;
+  const { editedRecipe } = req.body;
+  const id = editedRecipe.id;
+  const cleanedRecipe = cleanNewRecipeData(editedRecipe)
+  console.log(id)
+  console.log(cleanedRecipe)
+  try {
+    const currentRecipe = await Recipe.query().findById(id)
+    const existingRecipe = await user.$relatedQuery("recipes").findOne({ name: editedRecipe.name })
+    console.log(currentRecipe)
+    console.log(existingRecipe)
+    //trx for recipe, ingredients, steps
+  } catch(err) {
+
+  }
+})
+
 export default recipesRouter

@@ -149,6 +149,19 @@ const RecipeShow = (props) => {
     </div>
   )
 
+  let editButton
+  if (recipe.spoonacularId) {
+    editButton = (
+      <button className="button round grey bold margin-5">Edit Recipe</button>
+    )
+  } else {
+    editButton = (
+      <Link to={`/edit-recipe/${id}`}>
+        <button className="button round blue bold margin-5">Edit Recipe</button>
+      </Link>
+    )
+  }
+
   const name = _.startCase(recipe.name)
 
   if(shouldRedirect) {
@@ -177,10 +190,9 @@ const RecipeShow = (props) => {
           {made ? madeNotice : makeButton}
         </div>
       </div>
-      <Link to={`/edit-recipe/${id}`}>
-        <button className="button round blue bold margin-5">Edit Recipe</button>
-      </Link>
+      {editButton}
       <button className="button blue round bold margin-5" onClick={deleteRecipe}>Delete Recipe</button>
+      <p>Recipes from Spoonacular cannot be edited</p>
     </div>
   )
 }
