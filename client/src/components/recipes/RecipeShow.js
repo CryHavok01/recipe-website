@@ -152,11 +152,11 @@ const RecipeShow = (props) => {
   let editButton
   if (recipe.spoonacularId) {
     editButton = (
-      <button className="button round grey bold margin-5">Edit Recipe</button>
+      <button className="button round dim-grey bold margin-5">Edit Recipe</button>
     )
   } else {
     editButton = (
-      <Link to={`/edit-recipe/${id}`}>
+      <Link to={`/recipes/${id}/edit`}>
         <button className="button round blue bold margin-5">Edit Recipe</button>
       </Link>
     )

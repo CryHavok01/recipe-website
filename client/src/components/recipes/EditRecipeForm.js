@@ -276,7 +276,7 @@ const EditRecipeForm = (props) => {
   
     return (
       <div className="grid-container">
-        <h2 className="title">Add Your New Recipe</h2>
+        <h2 className="title">Edit Your Recipe</h2>
         <div className="callout">
           <ErrorList errors={serverErrors} />
             <form id="recipe-form" onSubmit={handleSubmit}>
