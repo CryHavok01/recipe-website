@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
 import FormError from "../layout/FormError"
+import translateServerErrors from "../../services/translateServerErrors"
+import ErrorList from "../shared/ErrorList"
 import { useParams } from "react-router-dom"
 
 const EditIngredientForm = (props) => {
-  const [showOther, setShowOther] = useState(false)
   const [ingredient, setIngredient] = useState({})
   const [formData, setFormData] = useState({
     name: "",
@@ -11,7 +12,9 @@ const EditIngredientForm = (props) => {
     unit: "",
     description: ""
   })
+  const [showOther, setShowOther] = useState(false)
   const [errors, setErrors] = useState({})
+  const [serverErrors, setServerErrors] = useState([])
 
   const { id } = useParams()
   
@@ -97,6 +100,11 @@ const EditIngredientForm = (props) => {
           body: JSON.stringify(formPayload)
         })
         if(!response.ok) {
+          if(response.status === 422) {
+            const body = await response.json()
+            const newErrors = translateServerErrors(body.errors)
+            return setServerErrors(newErrors)
+          }
           const errorMessage = `${response.status}: (${response.statusText})`
           const error = new Error(errorMessage)
           throw(error)
@@ -153,6 +161,7 @@ const EditIngredientForm = (props) => {
     <div>
       <h2 className="title">Edit Details for {ingredient.name}</h2>
       <form className="callout" onSubmit={handleSubmit}>
+        <ErrorList errors={serverErrors} />
         <label htmlFor="name">Name: </label>
         <input 
           type="text" 

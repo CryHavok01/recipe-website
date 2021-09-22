@@ -103,9 +103,17 @@ recipesRouter.patch("/edit", async (req, res) => {
     console.log(currentRecipe)
     console.log(existingRecipe)
     //trx for recipe, ingredients, steps
+    if (existingRecipe && editedRecipe.name !== currentRecipe.name) {
+      return res.status(422).json({ 
+        errors: {
+          "Looks like": [{
+            message: "you already have a recipe with the same name in your cookbook!  Please edit that recipe instead, or create a new one." 
+          }]
+        }
+      })
+    }
+    //if recipe has new recipe name, check for existing recipe in user cookbook.  If none, create new recipe, insert all ingredients, steps.  delete old favorite. delete old steps, delete old recipeMeasurements, delete old recipe.  If recipe exists, reject edit, send err that recipe already exists, please edit that recipe or use a different name.
 
-    //if recipe has new recipe name, check for existing recipe in user cookbook.  if none, create new recipe, insert all ingredients, steps.  delete old favorite. delete old steps, delete old recipeMeasurements, delete old recipe.
-    
     //if same name, update recipe details, update existing steps.  For each ingredient, check if same name or new name.  If same name, find original recipeMeasurement, delete, and insert new one.  If new name, find if ingredient exists.  If it exists, insert new recipeMeasurement.  If ingredient doesn't exist, insert new ingredient with measurements.
   } catch(err) {
 

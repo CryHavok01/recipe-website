@@ -61,6 +61,16 @@ ingredientsRouter.patch("/", async (req, res) => {
 
   try {
     const updatedIngredient = await editIngredient(user, ingredientId, cleanedIngredient)
+    console.log(updatedIngredient)
+    if (updatedIngredient === "already in pantry") {
+      return res.status(422).json({
+        errors: {
+          "Looks like": [{
+            message: "you already have an ingredient with the same name in your pantry!  Please edit that ingredient instead, or create a new one." 
+          }]
+        }
+      })
+    }
     const serializedIngredient = IngredientSerializer.getIngredientWithDetails(updatedIngredient)
     return res.status(200).json({ editedIngredient: serializedIngredient})
   } catch(err) {

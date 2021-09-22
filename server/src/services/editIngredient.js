@@ -2,12 +2,16 @@ import { User, Ingredient, PantryMeasurement } from "../models/index.js"
 
 
 const editIngredient = async (user, ingredientId, cleanedIngredient) => {
+  const currentIngredient = await Ingredient.query().findById(ingredientId)
   const existingIngredient = await Ingredient.query().findOne({ name: cleanedIngredient.name })
 
   if (existingIngredient) {
     const ingredientInPantry = await user.$relatedQuery("ingredients").where({ name: cleanedIngredient.name }).first()
 
     if (ingredientInPantry) {
+      if (currentIngredient.name !== cleanedIngredient.name) {
+        return "already in pantry"
+      }
       return editInPantry(user, ingredientId, cleanedIngredient, existingIngredient)
     }
     return editExistingIngredient(user, ingredientId, cleanedIngredient, existingIngredient)

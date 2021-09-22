@@ -80,17 +80,17 @@ const EditRecipeForm = (props) => {
             }),
             body: JSON.stringify(formPayload)
           })
-      //     if(!response.ok) {
-      //       if(response.status === 422) {
-      //         const body = await response.json()
-      //         const newErrors = translateServerErrors(body.errors)
-      //         return setServerErrors(newErrors)
-      //       } else {
-      //         const errorMessage = `${response.status}: (${response.statusText})`
-      //         const error = new Error(errorMessage)
-      //         throw(error)
-      //       }
-      //     }
+          if(!response.ok) {
+            if(response.status === 422) {
+              const body = await response.json()
+              const newErrors = translateServerErrors(body.errors)
+              return setServerErrors(newErrors)
+            } else {
+              const errorMessage = `${response.status}: (${response.statusText})`
+              const error = new Error(errorMessage)
+              throw(error)
+            }
+          }
       //     const { recipe } = await response.json()
       //     setNewRecipeId(recipe.id)
       //     setShouldRedirect(true)
