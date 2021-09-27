@@ -91,9 +91,9 @@ const EditRecipeForm = (props) => {
               throw(error)
             }
           }
-      //     const { recipe } = await response.json()
-      //     setNewRecipeId(recipe.id)
-      //     setShouldRedirect(true)
+          const { recipe } = await response.json()
+          setNewRecipeId(recipe.id)
+          setShouldRedirect(true)
         } catch(error) {
           console.error(`Error in Fetch: ${error.message}`)
         }

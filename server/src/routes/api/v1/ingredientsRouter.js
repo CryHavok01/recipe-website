@@ -65,7 +65,7 @@ ingredientsRouter.patch("/", async (req, res) => {
       return res.status(422).json({
         errors: {
           "Looks like": [{
-            message: "you already have an ingredient with the same name in your pantry!  Please edit that ingredient instead, or create a new one." 
+            message: "you already have an ingredient with the same name in your pantry!  Please edit that ingredient instead, or use a different name." 
           }]
         }
       })
