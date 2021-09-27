@@ -61,7 +61,6 @@ ingredientsRouter.patch("/", async (req, res) => {
 
   try {
     const updatedIngredient = await editIngredient(user, ingredientId, cleanedIngredient)
-    console.log(updatedIngredient)
     if (updatedIngredient === "already in pantry") {
       return res.status(422).json({
         errors: {
